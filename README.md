@@ -1,7 +1,7 @@
 kelp-core
 =========
 
-[**KeLP**][kelp-site] is the Kernel-based Learning Platform developed in the [Semantic Analytics Group][sag-site] of
+[**KeLP**][kelp-site]  is the Kernel-based Learning Platform developed in the [Semantic Analytics Group][sag-site] of
 the [University of Roma Tor Vergata][uniroma2-site].
 
 This is the core module of KeLP. It contains the abstract classes and interfaces to work with KeLP.
