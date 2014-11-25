@@ -8,3 +8,4 @@ This is the core module of KeLP. It contains the abstract classes and interfaces
 
 [sag-site]: http://sag.art.uniroma2.it "SAG site"
 [uniroma2-site]: http://www.uniroma2.it "University of Roma Tor Vergata"
+[kelp-site]: http://sag.art.uniroma2.it/demo-software/kelp/
