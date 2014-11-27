@@ -15,6 +15,8 @@
 
 package it.uniroma2.sag.kelp.predictionfunction.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import it.uniroma2.sag.kelp.data.example.Example;
 import it.uniroma2.sag.kelp.kernel.Kernel;
 
@@ -25,6 +27,7 @@ import it.uniroma2.sag.kelp.kernel.Kernel;
  */
 public interface KernelMachineModel extends Model{
 	
+	@JsonIgnore
 	public int getNumberOfSupportVectors();
 	
 	/**
