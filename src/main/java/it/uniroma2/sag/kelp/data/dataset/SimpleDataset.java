@@ -87,8 +87,8 @@ public class SimpleDataset implements Dataset {
 	 *            the dataset containing all the examples to be added
 	 */
 	public void addExamples(Dataset datasetToBeAdded) {
-		while (datasetToBeAdded.hasNextExample()) {
-			this.addExample(datasetToBeAdded.getNextExample());
+		for(Example e : datasetToBeAdded.getExamples()){
+			this.addExample(e);
 		}
 
 	}

@@ -15,6 +15,10 @@
 
 package it.uniroma2.sag.kelp.data.representation;
 
+import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * It is a Vectorial representation
  *  
@@ -69,6 +73,14 @@ public interface Vector extends Normalizable {
 	 * @return a zero vector
 	 */
 	public Vector getZeroVector();
+
+	/**
+	 * Returns a map containing all the non-zero features
+	 * 
+	 * @return the non zero features
+	 */
+	@JsonIgnore
+	public Map<String, Float> getActiveFeatures();
 
 	
 }
