@@ -1,17 +1,18 @@
 package it.uniroma2.sag.kelp.utils.evaluation;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import it.uniroma2.sag.kelp.data.label.Label;
 import it.uniroma2.sag.kelp.utils.exception.NoSuchPerformanceMeasureException;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public abstract class Evaluator {
 	public float getPerformanceMeasure(String performanceMeasureMethodName, Object[] args) throws NoSuchPerformanceMeasureException {
 		this.compute();
-		Class<?>[] methodParameters=null;
+		@SuppressWarnings("rawtypes")
+		Class[] methodParameters=null;
 		if (args != null) {
-			methodParameters = new Class<?>[args.length];
+			methodParameters = new Class[args.length];
 			for (int i=0; i<args.length; ++i) {
 				methodParameters[i] = args[i].getClass();
 			}
