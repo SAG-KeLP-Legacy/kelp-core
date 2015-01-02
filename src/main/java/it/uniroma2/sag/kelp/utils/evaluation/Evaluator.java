@@ -1,5 +1,6 @@
 package it.uniroma2.sag.kelp.utils.evaluation;
 
+import it.uniroma2.sag.kelp.data.example.Example;
 import it.uniroma2.sag.kelp.data.label.Label;
 import it.uniroma2.sag.kelp.utils.exception.NoSuchPerformanceMeasureException;
 
@@ -35,6 +36,6 @@ public abstract class Evaluator {
 		}
 	}
 	
-	public abstract void addCount(Label gold, Label predicted);
+	public abstract void addCount(Example test, Label predicted);
 	public abstract void compute();
 }

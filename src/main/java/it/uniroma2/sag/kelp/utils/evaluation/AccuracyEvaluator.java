@@ -1,5 +1,6 @@
 package it.uniroma2.sag.kelp.utils.evaluation;
 
+import it.uniroma2.sag.kelp.data.example.Example;
 import it.uniroma2.sag.kelp.data.label.Label;
 /**
  * This is an instance of an Evaluator. 
@@ -23,9 +24,9 @@ public class AccuracyEvaluator extends Evaluator {
 		accuracy=0.0f;
 	}
 
-	public void addCount(Label gold, Label predicted) {
+	public void addCount(Example test, Label predicted) {
 		total++;
-		if (gold.equals(predicted))
+		if (test.isExampleOf(predicted))
 			correct++;
 	}
 

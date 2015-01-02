@@ -1,6 +1,7 @@
 package it.uniroma2.sag.kelp.utils.evaluation;
 
 import gnu.trove.map.hash.TObjectFloatHashMap;
+import it.uniroma2.sag.kelp.data.example.Example;
 import it.uniroma2.sag.kelp.data.label.Label;
 
 import java.util.ArrayList;
@@ -67,7 +68,8 @@ public class F1Evaluator extends Evaluator {
 		return f1s;
 	}
 
-	public void addCount(Label gold, Label predicted) {
+	public void addCount(Example test, Label predicted) {
+		Label gold = test.getLabels()[0];
 		toBePredictedCounter.put(gold, toBePredictedCounter.get(gold) + 1);
 		predictedCounter.put(predicted, predictedCounter.get(predicted) + 1);
 		if (predicted.equals(gold)) {
@@ -77,9 +79,14 @@ public class F1Evaluator extends Evaluator {
 
 	public void compute() {
 		for (Label l : labels) {
-			float precision = correctCounter.get(l) / predictedCounter.get(l);
-			float recall = correctCounter.get(l) / toBePredictedCounter.get(l);
-			float f1 = (2 * precision * recall) / (precision + recall);
+			float precision = 0.0f;
+			float recall = 0.0f;
+			float f1 = 0.0f;
+			if (correctCounter.get(l) != 0 && predictedCounter.get(l) != 0 && toBePredictedCounter.get(l) != 0) {
+				precision = correctCounter.get(l) / predictedCounter.get(l);
+				recall = correctCounter.get(l) / toBePredictedCounter.get(l);
+				f1 = (2 * precision * recall) / (precision + recall);
+			}
 			
 			precisions.put(l, precision);
 			recalls.put(l, recall);
