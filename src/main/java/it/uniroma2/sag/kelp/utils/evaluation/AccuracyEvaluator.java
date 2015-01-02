@@ -15,7 +15,7 @@ public class AccuracyEvaluator extends Evaluator {
 	private float accuracy;
 	
 	/**
-	 * Initialize a new F1Evaluator that will work on the specified classes
+	 * Initialize a new AccuracyEvaluator that will work on the specified classes
 	 * @param labels
 	 */
 	public AccuracyEvaluator() {
@@ -37,7 +37,7 @@ public class AccuracyEvaluator extends Evaluator {
 	}
 
 	/**
-	 * Return the mean of the F1 scores considering all the labels involved
+	 * Return the accuracy
 	 * 
 	 * @return mean F1 of all Label{s}
 	 */
