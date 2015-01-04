@@ -48,6 +48,7 @@ public class AccuracyEvaluator extends Evaluator {
 	/**
 	 * Clear all the counters for a new processing.
 	 */
+	@Override
 	public void clear() {
 		correct=0;
 		total=0;

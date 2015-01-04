@@ -8,7 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public abstract class Evaluator {
-	public float getPerformanceMeasure(String performanceMeasureMethodName, Object[] args) throws NoSuchPerformanceMeasureException {
+	public float getPerformanceMeasure(String performanceMeasureMethodName, Object ... args) throws NoSuchPerformanceMeasureException {
 		this.compute();
 		@SuppressWarnings("rawtypes")
 		Class[] methodParameters=null;
@@ -38,4 +38,5 @@ public abstract class Evaluator {
 	
 	public abstract void addCount(Example test, Label predicted);
 	public abstract void compute();
+	public abstract void clear();
 }

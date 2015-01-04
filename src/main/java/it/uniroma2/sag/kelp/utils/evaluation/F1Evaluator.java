@@ -153,6 +153,7 @@ public class F1Evaluator extends Evaluator {
 	/**
 	 * Clear all the counters for a new processing.
 	 */
+	@Override
 	public void clear() {
 		correctCounter.clear();
 		predictedCounter.clear();
