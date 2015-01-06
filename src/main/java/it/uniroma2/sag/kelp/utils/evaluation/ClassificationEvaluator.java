@@ -3,15 +3,18 @@ package it.uniroma2.sag.kelp.utils.evaluation;
 import gnu.trove.map.hash.TObjectFloatHashMap;
 import it.uniroma2.sag.kelp.data.example.Example;
 import it.uniroma2.sag.kelp.data.label.Label;
+import it.uniroma2.sag.kelp.predictionfunction.Prediction;
+import it.uniroma2.sag.kelp.predictionfunction.classifier.ClassificationOutput;
 
 import java.util.ArrayList;
 /**
  * This is an instance of an Evaluator. 
- * It allows to compute the Precision, Recall and F1.
+ * It allows to compute the some common measure for classification tasks. 
+ * It computes precision, recall, f1s for each class, and a global accuracy.
  * 
  * @author Giuseppe Castellucci
  */
-public class F1Evaluator extends Evaluator {
+public class ClassificationEvaluator extends Evaluator {
 	private ArrayList<Label> labels;
 	private TObjectFloatHashMap<Label> correctCounter = new TObjectFloatHashMap<Label>();
 	private TObjectFloatHashMap<Label> predictedCounter = new TObjectFloatHashMap<Label>();
@@ -20,12 +23,15 @@ public class F1Evaluator extends Evaluator {
 	private TObjectFloatHashMap<Label> precisions = new TObjectFloatHashMap<Label>();
 	private TObjectFloatHashMap<Label> recalls = new TObjectFloatHashMap<Label>();
 	private TObjectFloatHashMap<Label> f1s = new TObjectFloatHashMap<Label>();
+	
+	private int total,correct;
+	private float accuracy;
 
 	/**
 	 * Initialize a new F1Evaluator that will work on the specified classes
 	 * @param labels
 	 */
-	public F1Evaluator(ArrayList<Label> labels) {
+	public ClassificationEvaluator(ArrayList<Label> labels) {
 		this.labels = labels;
 		initializeCounters();
 	}
@@ -39,6 +45,9 @@ public class F1Evaluator extends Evaluator {
 			recalls.put(l, -1.0f);
 			f1s.put(l, -1.0f);
 		}
+		total=0;
+		correct=0;
+		accuracy=0.0f;
 	}
 
 	/**
@@ -68,13 +77,19 @@ public class F1Evaluator extends Evaluator {
 		return f1s;
 	}
 
-	public void addCount(Example test, Label predicted) {
+	public void addCount(Example test, Prediction prediction) {
+		ClassificationOutput tmp = (ClassificationOutput)prediction;
+		Label predicted = tmp.getPredictedClasses().get(0);
 		Label gold = test.getLabels()[0];
 		toBePredictedCounter.put(gold, toBePredictedCounter.get(gold) + 1);
 		predictedCounter.put(predicted, predictedCounter.get(predicted) + 1);
-		if (predicted.equals(gold)) {
+		
+		if (test.isExampleOf(predicted)) {
 			correctCounter.put(gold, correctCounter.get(gold) + 1);
+			correct++;
 		}
+		
+		total++;
 	}
 
 	public void compute() {
@@ -92,6 +107,8 @@ public class F1Evaluator extends Evaluator {
 			recalls.put(l, recall);
 			f1s.put(l, f1);
 		}
+		
+		accuracy = (float)correct/(float)total;
 	}
 
 	/**
@@ -125,6 +142,15 @@ public class F1Evaluator extends Evaluator {
 		if (f1s.containsKey(l))
 			return f1s.get(l);
 		return -1.0f;
+	}
+	
+	/**
+	 * Return the accuracy
+	 * 
+	 * @return accuracy
+	 */
+	public float getAccuracy() {
+		return accuracy;
 	}
 
 	/**
@@ -161,6 +187,7 @@ public class F1Evaluator extends Evaluator {
 		precisions.clear();
 		recalls.clear();
 		f1s.clear();
+		accuracy = 0.0f;
 	}
 	
 	/**
