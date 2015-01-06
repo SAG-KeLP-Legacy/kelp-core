@@ -2,8 +2,12 @@ package it.uniroma2.sag.kelp.utils.evaluation;
 
 import it.uniroma2.sag.kelp.data.example.Example;
 import it.uniroma2.sag.kelp.data.label.Label;
+import it.uniroma2.sag.kelp.predictionfunction.Prediction;
+import it.uniroma2.sag.kelp.predictionfunction.classifier.ClassificationOutput;
 /**
- * This is an instance of an Evaluator. 
+ * This is the simplest instance of an Evaluator. 
+ * It serves as an example on how to use the evaluators. 
+ * 
  * It allows to compute the Accuracy.
  * 
  * @author Giuseppe Castellucci
@@ -24,7 +28,9 @@ public class AccuracyEvaluator extends Evaluator {
 		accuracy=0.0f;
 	}
 
-	public void addCount(Example test, Label predicted) {
+	public void addCount(Example test, Prediction prediction) {
+		ClassificationOutput tmp = (ClassificationOutput)prediction;
+		Label predicted = tmp.getPredictedClasses().get(0);
 		total++;
 		if (test.isExampleOf(predicted))
 			correct++;
