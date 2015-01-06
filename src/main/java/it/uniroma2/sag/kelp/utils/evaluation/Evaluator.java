@@ -1,14 +1,24 @@
 package it.uniroma2.sag.kelp.utils.evaluation;
 
 import it.uniroma2.sag.kelp.data.example.Example;
-import it.uniroma2.sag.kelp.data.label.Label;
+import it.uniroma2.sag.kelp.predictionfunction.Prediction;
 import it.uniroma2.sag.kelp.utils.exception.NoSuchPerformanceMeasureException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public abstract class Evaluator {
-	public float getPerformanceMeasure(String performanceMeasureMethodName, Object ... args) throws NoSuchPerformanceMeasureException {
+	
+	/**
+	 * This method allow to retrieve a performance measure by specifying the name of the method to be used.
+	 *  
+	 * @param performanceMeasureMethodName the method of the name to be used to retrive the performance measure
+	 * @param args the arguments to be passed to the method @param performanceMeasureMethodName.
+	 * @return the float representing the requested measure
+	 * 
+	 * @throws NoSuchPerformanceMeasureException
+	 */
+	public float getPerformanceMeasure(String performanceMeasureMethodName, Object... args) throws NoSuchPerformanceMeasureException {
 		this.compute();
 		@SuppressWarnings("rawtypes")
 		Class[] methodParameters=null;
@@ -36,7 +46,21 @@ public abstract class Evaluator {
 		}
 	}
 	
-	public abstract void addCount(Example test, Label predicted);
+	/**
+	 * This method should be implemented in the subclasses to update counters useful to compute the performance measure
+	 * 
+	 * @param test the test example
+	 * @param predicted the prediction of the system
+	 */
+	public abstract void addCount(Example test, Prediction predicted);
+	
+	/**
+	 * This method is intented to force the computation of the performance measure.
+	 */
 	public abstract void compute();
+	
+	/**
+	 * This method should reset the state of the evaluator
+	 */
 	public abstract void clear();
 }
