@@ -6,7 +6,7 @@ import it.uniroma2.sag.kelp.data.label.Label;
 import it.uniroma2.sag.kelp.predictionfunction.Prediction;
 import it.uniroma2.sag.kelp.predictionfunction.classifier.ClassificationOutput;
 
-import java.util.ArrayList;
+import java.util.List;
 /**
  * This is an instance of an Evaluator. 
  * It allows to compute the some common measure for classification tasks. 
@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * @author Giuseppe Castellucci
  */
 public class ClassificationEvaluator extends Evaluator {
-	private ArrayList<Label> labels;
+	private List<Label> labels;
 	private TObjectFloatHashMap<Label> correctCounter = new TObjectFloatHashMap<Label>();
 	private TObjectFloatHashMap<Label> predictedCounter = new TObjectFloatHashMap<Label>();
 	private TObjectFloatHashMap<Label> toBePredictedCounter = new TObjectFloatHashMap<Label>();
@@ -31,7 +31,7 @@ public class ClassificationEvaluator extends Evaluator {
 	 * Initialize a new F1Evaluator that will work on the specified classes
 	 * @param labels
 	 */
-	public ClassificationEvaluator(ArrayList<Label> labels) {
+	public ClassificationEvaluator(List<Label> labels) {
 		this.labels = labels;
 		initializeCounters();
 	}
@@ -167,7 +167,7 @@ public class ClassificationEvaluator extends Evaluator {
 	 * 
 	 * @return mean F1 of specified Label{s} ls
 	 */
-	public float getMeanF1For(ArrayList<Label> ls) {
+	public float getMeanF1For(List<Label> ls) {
 		float sum = 0.0f;
 		for (Label l : ls) {
 			sum += f1s.get(l);
