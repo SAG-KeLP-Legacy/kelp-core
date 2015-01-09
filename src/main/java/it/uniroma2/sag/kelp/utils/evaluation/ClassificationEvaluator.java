@@ -1,3 +1,18 @@
+/*
+ * Copyright 2014 Simone Filice and Giuseppe Castellucci and Danilo Croce and Roberto Basili
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package it.uniroma2.sag.kelp.utils.evaluation;
 
 import gnu.trove.map.hash.TObjectFloatHashMap;
@@ -6,6 +21,7 @@ import it.uniroma2.sag.kelp.data.label.Label;
 import it.uniroma2.sag.kelp.predictionfunction.Prediction;
 import it.uniroma2.sag.kelp.predictionfunction.classifier.ClassificationOutput;
 
+import java.util.ArrayList;
 import java.util.List;
 /**
  * This is an instance of an Evaluator. 
@@ -159,7 +175,7 @@ public class ClassificationEvaluator extends Evaluator {
 	 * @return mean F1 of all Label{s}
 	 */
 	public float getMeanF1() {
-		return getMeanF1For(labels);
+		return getMeanF1For((ArrayList<Label>)labels);
 	}
 
 	/**
@@ -167,7 +183,7 @@ public class ClassificationEvaluator extends Evaluator {
 	 * 
 	 * @return mean F1 of specified Label{s} ls
 	 */
-	public float getMeanF1For(List<Label> ls) {
+	public float getMeanF1For(ArrayList<Label> ls) {
 		float sum = 0.0f;
 		for (Label l : ls) {
 			sum += f1s.get(l);
