@@ -100,7 +100,7 @@ public class ExampleFactory {
 				+ representationType				
 				+ identifierPart
 				+ ExampleFactory.DELIMITER
-				+ representation.toString()
+				+ representation.getTextFromData()
 				+ ExampleFactory.END_REPRESENTATION
 				+ representationType
 				+ ExampleFactory.DELIMITER;
