@@ -11,16 +11,16 @@ import it.uniroma2.sag.kelp.data.dataset.Dataset;
 import it.uniroma2.sag.kelp.data.example.Example;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Vector;
 
 /**
  * Given a dataset, this cache stores kernel computations is "Stripes". The
  * cache has been designed to store all kernel computations between an
  * <code>Example</code> <code>i</code> and all the remaining examples from the
- * <code>Dataset</code>. To reduce the requiriment of memory space, the cache
+ * <code>Dataset</code>. To reduce the requirement of memory space, the cache
  * stores only <code>n</code> stripes. When the number of stripes is exceeded,
  * they are removed according to a FIFO policy.
  * 
@@ -54,7 +54,7 @@ public class StripeKernelCache extends KernelCache implements Serializable {
 	/**
 	 * The list of rows in <code>buffer</code> that are empty
 	 */
-	private Vector<Integer> freeRowsIds;
+	private ArrayList<Integer> freeRowsIds;
 
 	/**
 	 * The FIFO list of added examples. It helps to remove the "oldest" example
@@ -63,7 +63,7 @@ public class StripeKernelCache extends KernelCache implements Serializable {
 	private Queue<Long> examplesIdQueue;
 
 	/**
-	 * The map between Example Id and rows of the matrix to which the Example is
+	 * The map between Example Id and the row of the matrix to which the Example is
 	 * assigned to
 	 */
 	private TLongIntHashMap rowDict;
@@ -114,7 +114,7 @@ public class StripeKernelCache extends KernelCache implements Serializable {
 
 		this.matrixColumnIndex = 0;
 
-		this.freeRowsIds = new Vector<Integer>();
+		this.freeRowsIds = new ArrayList<Integer>();
 		this.examplesIdQueue = new LinkedList<Long>();
 
 		this.rowDict = new TLongIntHashMap();
@@ -148,7 +148,7 @@ public class StripeKernelCache extends KernelCache implements Serializable {
 		int colId = columnDict.get(indexB);
 
 		float res;
-		if (!Float.isNaN(res = buffer[rowId][colId]))
+		if (!Float.isNaN(res = buffer[rowId][colId]))//TODO: non ho capito questo controllo. Cosa cambia dal fare subito un return buffer[rowId][colId]?
 			return res;
 		else
 			return INVALID_KERNEL_VALUE;
@@ -156,7 +156,7 @@ public class StripeKernelCache extends KernelCache implements Serializable {
 
 	@Override
 	public void setKernelValue(Example exA, Example exB, float value) {
-
+	
 		// Get the example identifier
 		long indexA = exA.getId();
 		long indexB = exB.getId();
@@ -206,14 +206,14 @@ public class StripeKernelCache extends KernelCache implements Serializable {
 				// All the element in the row are set as invalid
 				for (int i = 0; i < buffer[rowToClear].length; i++)
 					if (!Float.isNaN(this.buffer[rowToClear][i]))
-						this.buffer[rowToClear][i] = INVALID_KERNEL_VALUE;
+						this.buffer[rowToClear][i] = INVALID_KERNEL_VALUE;//TODO: non fai prima a mettere a INVALID_KERNEL_VALUE tutto senza passare per il controllo se già lo è?
 				// A new element is added in the list of empty rows
 				this.freeRowsIds.add(rowToClear);
 				// The deleted row is removed from the dictionary
 				this.rowDict.remove(elementToRemove);
 			}
 			// The first free row is selected and cleared
-			rowId = this.freeRowsIds.firstElement();
+			rowId = this.freeRowsIds.get(0);
 			this.freeRowsIds.remove(0);
 			if (this.buffer[rowId] == null)
 				this.buffer[rowId] = new float[this.maxDimensionSize];
@@ -252,6 +252,7 @@ public class StripeKernelCache extends KernelCache implements Serializable {
 
 	@Override
 	protected Float getStoredKernelValue(Example exA, Example exB) {
+		
 		long indexA = exA.getId();
 		long indexB = exB.getId();
 
