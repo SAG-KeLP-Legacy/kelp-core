@@ -1,7 +1,16 @@
-/**
- * Cache for kernel computations  
- * 
- * @author      Simone Filice
+/*
+ * Copyright 2014 Simone Filice and Giuseppe Castellucci and Danilo Croce and Roberto Basili
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package it.uniroma2.sag.kelp.kernel.cache;
@@ -32,6 +41,11 @@ public class StripeKernelCache extends KernelCache implements Serializable {
 
 	private static final long serialVersionUID = -4040974882736610829L;
 
+	/**
+	 * A float to set a cache element as invalid. <br>
+	 * NOTE: DO NOT CHAGE this constant. If you have to change this constant,
+	 * you should change the isNan() function in getStoredKernelValue()
+	 */
 	private static final float INVALID_KERNEL_VALUE = Float.NaN;
 
 	/**
@@ -63,8 +77,8 @@ public class StripeKernelCache extends KernelCache implements Serializable {
 	private Queue<Long> examplesIdQueue;
 
 	/**
-	 * The map between Example Id and the row of the matrix to which the Example is
-	 * assigned to
+	 * The map between Example Id and the row of the matrix to which the Example
+	 * is assigned to
 	 */
 	private TLongIntHashMap rowDict;
 
@@ -147,16 +161,12 @@ public class StripeKernelCache extends KernelCache implements Serializable {
 		int rowId = rowDict.get(indexA);
 		int colId = columnDict.get(indexB);
 
-		float res;
-		if (!Float.isNaN(res = buffer[rowId][colId]))//TODO: non ho capito questo controllo. Cosa cambia dal fare subito un return buffer[rowId][colId]?
-			return res;
-		else
-			return INVALID_KERNEL_VALUE;
+		return buffer[rowId][colId];
 	}
 
 	@Override
 	public void setKernelValue(Example exA, Example exB, float value) {
-	
+
 		// Get the example identifier
 		long indexA = exA.getId();
 		long indexB = exB.getId();
@@ -204,9 +214,7 @@ public class StripeKernelCache extends KernelCache implements Serializable {
 				long elementToRemove = this.examplesIdQueue.poll();
 				int rowToClear = this.rowDict.get(elementToRemove);
 				// All the element in the row are set as invalid
-				for (int i = 0; i < buffer[rowToClear].length; i++)
-					if (!Float.isNaN(this.buffer[rowToClear][i]))
-						this.buffer[rowToClear][i] = INVALID_KERNEL_VALUE;//TODO: non fai prima a mettere a INVALID_KERNEL_VALUE tutto senza passare per il controllo se già lo è?
+				Arrays.fill(this.buffer[rowToClear], INVALID_KERNEL_VALUE);
 				// A new element is added in the list of empty rows
 				this.freeRowsIds.add(rowToClear);
 				// The deleted row is removed from the dictionary
@@ -252,7 +260,7 @@ public class StripeKernelCache extends KernelCache implements Serializable {
 
 	@Override
 	protected Float getStoredKernelValue(Example exA, Example exB) {
-		
+
 		long indexA = exA.getId();
 		long indexB = exB.getId();
 
