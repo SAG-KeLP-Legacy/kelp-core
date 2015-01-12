@@ -1,7 +1,16 @@
-/**
- * Cache for kernel computations  
- * 
- * @author      Simone Filice
+/*
+ * Copyright 2014 Simone Filice and Giuseppe Castellucci and Danilo Croce and Roberto Basili
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package it.uniroma2.sag.kelp.kernel.cache;
@@ -11,16 +20,16 @@ import it.uniroma2.sag.kelp.data.dataset.Dataset;
 import it.uniroma2.sag.kelp.data.example.Example;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Vector;
 
 /**
  * Given a dataset, this cache stores kernel computations is "Stripes". The
  * cache has been designed to store all kernel computations between an
  * <code>Example</code> <code>i</code> and all the remaining examples from the
- * <code>Dataset</code>. To reduce the requiriment of memory space, the cache
+ * <code>Dataset</code>. To reduce the requirement of memory space, the cache
  * stores only <code>n</code> stripes. When the number of stripes is exceeded,
  * they are removed according to a FIFO policy.
  * 
@@ -32,6 +41,11 @@ public class StripeKernelCache extends KernelCache implements Serializable {
 
 	private static final long serialVersionUID = -4040974882736610829L;
 
+	/**
+	 * A float to set a cache element as invalid. <br>
+	 * NOTE: DO NOT CHAGE this constant. If you have to change this constant,
+	 * you should change the isNan() function in getStoredKernelValue()
+	 */
 	private static final float INVALID_KERNEL_VALUE = Float.NaN;
 
 	/**
@@ -54,7 +68,7 @@ public class StripeKernelCache extends KernelCache implements Serializable {
 	/**
 	 * The list of rows in <code>buffer</code> that are empty
 	 */
-	private Vector<Integer> freeRowsIds;
+	private ArrayList<Integer> freeRowsIds;
 
 	/**
 	 * The FIFO list of added examples. It helps to remove the "oldest" example
@@ -63,8 +77,8 @@ public class StripeKernelCache extends KernelCache implements Serializable {
 	private Queue<Long> examplesIdQueue;
 
 	/**
-	 * The map between Example Id and rows of the matrix to which the Example is
-	 * assigned to
+	 * The map between Example Id and the row of the matrix to which the Example
+	 * is assigned to
 	 */
 	private TLongIntHashMap rowDict;
 
@@ -114,7 +128,7 @@ public class StripeKernelCache extends KernelCache implements Serializable {
 
 		this.matrixColumnIndex = 0;
 
-		this.freeRowsIds = new Vector<Integer>();
+		this.freeRowsIds = new ArrayList<Integer>();
 		this.examplesIdQueue = new LinkedList<Long>();
 
 		this.rowDict = new TLongIntHashMap();
@@ -147,11 +161,7 @@ public class StripeKernelCache extends KernelCache implements Serializable {
 		int rowId = rowDict.get(indexA);
 		int colId = columnDict.get(indexB);
 
-		float res;
-		if (!Float.isNaN(res = buffer[rowId][colId]))
-			return res;
-		else
-			return INVALID_KERNEL_VALUE;
+		return buffer[rowId][colId];
 	}
 
 	@Override
@@ -204,16 +214,14 @@ public class StripeKernelCache extends KernelCache implements Serializable {
 				long elementToRemove = this.examplesIdQueue.poll();
 				int rowToClear = this.rowDict.get(elementToRemove);
 				// All the element in the row are set as invalid
-				for (int i = 0; i < buffer[rowToClear].length; i++)
-					if (!Float.isNaN(this.buffer[rowToClear][i]))
-						this.buffer[rowToClear][i] = INVALID_KERNEL_VALUE;
+				Arrays.fill(this.buffer[rowToClear], INVALID_KERNEL_VALUE);
 				// A new element is added in the list of empty rows
 				this.freeRowsIds.add(rowToClear);
 				// The deleted row is removed from the dictionary
 				this.rowDict.remove(elementToRemove);
 			}
 			// The first free row is selected and cleared
-			rowId = this.freeRowsIds.firstElement();
+			rowId = this.freeRowsIds.get(0);
 			this.freeRowsIds.remove(0);
 			if (this.buffer[rowId] == null)
 				this.buffer[rowId] = new float[this.maxDimensionSize];
@@ -252,6 +260,7 @@ public class StripeKernelCache extends KernelCache implements Serializable {
 
 	@Override
 	protected Float getStoredKernelValue(Example exA, Example exB) {
+
 		long indexA = exA.getId();
 		long indexB = exB.getId();
 
