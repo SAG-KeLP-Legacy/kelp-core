@@ -53,13 +53,6 @@ public class MulticlassClassificationEvaluator extends Evaluator {
 		this.labels = labels;
 		initializeCounters();
 	}
-	
-	public MulticlassClassificationEvaluator(Label positiveClass) {
-		ArrayList<Label> a = new ArrayList<Label>();
-		a.add(positiveClass);
-		this.labels = a;
-		initializeCounters();
-	}
 
 	private void initializeCounters() {
 		for (Label l : labels) {
