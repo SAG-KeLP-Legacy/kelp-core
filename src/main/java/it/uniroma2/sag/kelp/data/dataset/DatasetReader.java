@@ -22,6 +22,7 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.zip.GZIPInputStream;
 
 /**
  * A utility class to read dataset in the platform format.
@@ -35,8 +36,15 @@ public class DatasetReader {
 	private String filename;
 
 	public DatasetReader(String filename) throws IOException {
-		InputStreamReader reader = new InputStreamReader(new FileInputStream(
-				filename), "UTF8");
+		InputStreamReader reader = null;
+		GZIPInputStream gzis = null;
+		if (filename.endsWith(".gz")) {
+			gzis = new GZIPInputStream(new FileInputStream(filename));
+			reader = new InputStreamReader(gzis, "UTF8");
+		} else {
+			reader = new InputStreamReader(new FileInputStream(filename),
+					"UTF8");
+		}
 
 		this.inputBuffer = new BufferedReader(reader);
 		this.hasNextRow = true;
