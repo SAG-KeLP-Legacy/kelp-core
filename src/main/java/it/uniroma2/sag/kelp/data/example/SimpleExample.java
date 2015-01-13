@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
@@ -64,53 +63,29 @@ public class SimpleExample extends Example {
 		this.setRepresentations(representations);
 	}
 	
-	/**
-	 * Sets the example representations
-	 * 
-	 * @param representations
-	 *            to associate to this example
-	 */
+	@Override
 	public void setRepresentations(HashMap<String, Representation> representations) {
 
 		this.representations.clear();
 		this.representations=representations;
 	}
 	
-	/**
-	 * Returns the example representations
-	 * 
-	 * @return the representations of this example
-	 */
+	@Override
 	public Map<String, Representation> getRepresentations() {
 		return this.representations;
 	}
 	
-	/**
-	 * Adds a representation to this example
-	 * 
-	 * @param representationName the identifier of the representation to be added
-	 * @param representation the representation to be added
-	 */
+	@Override
 	public void addRepresentation(String representationName, Representation representation) {
 		representations.put(representationName, representation);
 	}
 	
-	/**
-	 * Returns the number of representations in which this example is modeled
-	 * 
-	 * @return the number of representations
-	 */
-	@JsonIgnore
+	@Override
 	public int getNumberOfRepresentations() {
 		return representations.size();
 	}
 	
-	/**
-	 * Returns the representation corresponding to <code>representationName</code>
-	 * 
-	 * @param representationName it is a representation identifier
-	 * @return the representation corresponding to <code>representationName</code>
-	 */
+	@Override
 	public Representation getRepresentation(String representationName) {
 		return this.representations.get(representationName);
 	}

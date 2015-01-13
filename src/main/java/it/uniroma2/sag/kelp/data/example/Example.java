@@ -17,12 +17,14 @@ package it.uniroma2.sag.kelp.data.example;
 
 import it.uniroma2.sag.kelp.data.label.Label;
 import it.uniroma2.sag.kelp.data.label.NumericLabel;
+import it.uniroma2.sag.kelp.data.representation.Representation;
 import it.uniroma2.sag.kelp.data.representation.Vector;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import org.apache.commons.lang3.SerializationUtils;
 
@@ -272,6 +274,45 @@ public abstract class Example implements Serializable {
 		}
 		return ret;
 	}
+	
+	/**
+	 * Sets the example representations
+	 * 
+	 * @param representations
+	 *            to associate to this example
+	 */
+	public abstract void setRepresentations(HashMap<String, Representation> representations);
+	
+	/**
+	 * Returns the example representations
+	 * 
+	 * @return the representations of this example
+	 */
+	public abstract Map<String, Representation> getRepresentations();
+	
+	/**
+	 * Adds a representation to this example
+	 * 
+	 * @param representationName the identifier of the representation to be added
+	 * @param representation the representation to be added
+	 */
+	public abstract void addRepresentation(String representationName, Representation representation);
+	
+	/**
+	 * Returns the number of representations in which this example is modeled
+	 * 
+	 * @return the number of representations
+	 */
+	@JsonIgnore
+	public abstract int getNumberOfRepresentations();
+	
+	/**
+	 * Returns the representation corresponding to <code>representationName</code>
+	 * 
+	 * @param representationName it is a representation identifier
+	 * @return the representation corresponding to <code>representationName</code>
+	 */
+	public abstract Representation getRepresentation(String representationName);
 	
 	public abstract Vector getZeroVector(String representationIdentifier);
 

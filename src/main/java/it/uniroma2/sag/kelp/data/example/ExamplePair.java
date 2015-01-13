@@ -15,9 +15,12 @@
 
 package it.uniroma2.sag.kelp.data.example;
 
+import java.util.Map.Entry;
+
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import it.uniroma2.sag.kelp.data.example.Example;
+import it.uniroma2.sag.kelp.data.representation.Representation;
 import it.uniroma2.sag.kelp.data.representation.Vector;
 
 
@@ -29,7 +32,7 @@ import it.uniroma2.sag.kelp.data.representation.Vector;
  * @author Simone Filice
  */
 @JsonTypeName("pair")
-public class ExamplePair extends Example{
+public class ExamplePair extends SimpleExample{
 	/**
 	 * 
 	 */
@@ -76,6 +79,14 @@ public class ExamplePair extends Example{
 	public String toString(){
 		String ret = this.getTextualLabelPart();
 		ret += ExampleFactory.BEGIN_PAIR + leftExample.toString() + ExampleFactory.PAIR_SEPARATOR + rightExample.toString() + ExampleFactory.END_PAIR;
+		for(Entry<String, Representation> entry: this.getRepresentations().entrySet()){
+			Representation representation = entry.getValue();
+			String identifier = entry.getKey();
+			
+			ret += ExampleFactory.getTextualRepresentation(representation, identifier)					
+					+ ExampleFactory.REPRESENTATION_SEPARATOR;
+			
+		}
 		return ret;
 	}
 }

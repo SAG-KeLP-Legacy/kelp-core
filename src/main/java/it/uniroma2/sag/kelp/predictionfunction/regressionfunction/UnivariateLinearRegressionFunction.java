@@ -16,7 +16,6 @@
 package it.uniroma2.sag.kelp.predictionfunction.regressionfunction;
 
 import it.uniroma2.sag.kelp.data.example.Example;
-import it.uniroma2.sag.kelp.data.example.SimpleExample;
 import it.uniroma2.sag.kelp.data.representation.Vector;
 import it.uniroma2.sag.kelp.predictionfunction.model.BinaryLinearModel;
 import it.uniroma2.sag.kelp.predictionfunction.model.Model;
@@ -37,7 +36,7 @@ public class UnivariateLinearRegressionFunction extends UnivariateRegressionFunc
 	
 	@Override
 	public UnivariateRegressionOutput predict(Example example) {
-		Vector vector = (Vector)((SimpleExample)example).getRepresentation(model.getRepresentation());
+		Vector vector = (Vector)example.getRepresentation(model.getRepresentation());
 
 		float prediction = model.getBias();	
 		if(model.getHyperplane()==null){
