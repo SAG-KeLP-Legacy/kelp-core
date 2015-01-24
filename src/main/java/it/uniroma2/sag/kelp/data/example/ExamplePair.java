@@ -89,4 +89,18 @@ public class ExamplePair extends SimpleExample{
 		}
 		return ret;
 	}
+	
+	/**
+	 * Manipulate this example accordingly to the provided <code>manipulator</code>. The manipulation strategy is applied
+	 * both to the representations stored directly in this ExamplePair than to the ones stored in the left and right
+	 * examples
+	 * 
+	 * @param manipulator the manipulator
+	 */
+	@Override
+	public void manipulate(Manipulator manipulator){
+		super.manipulate(manipulator);
+		this.leftExample.manipulate(manipulator);
+		this.rightExample.manipulate(manipulator);
+	}
 }

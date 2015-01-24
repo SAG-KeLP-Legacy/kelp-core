@@ -16,6 +16,7 @@
 package it.uniroma2.sag.kelp.data.dataset;
 
 import it.uniroma2.sag.kelp.data.example.Example;
+import it.uniroma2.sag.kelp.data.example.Manipulator;
 import it.uniroma2.sag.kelp.data.label.Label;
 import it.uniroma2.sag.kelp.data.representation.Vector;
 
@@ -141,10 +142,17 @@ public interface Dataset {
 	public Dataset getShuffledDataset();
 	
 	/**
-	 *  Sets the seed of the random generator used to shuffling examples and getting random examples
+	 * Sets the seed of the random generator used to shuffling examples and getting random examples
 	 * 
 	 * @param seed the seed of the random generator
 	 */
 	public void setSeed(long seed);
+	
+	/**
+	 * Manipulates all the examples in the dataset accordingly to the strategies defined by the given <code>manipulators</code>
+	 * 
+	 * @param manipulators the manipulators that must be applied to all the examples in the dataset
+	 */
+	public void manipulate(List<Manipulator> manipulators);
 		
 }

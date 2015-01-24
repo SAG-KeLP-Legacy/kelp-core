@@ -175,4 +175,9 @@ public class SimpleExample extends Example {
 		Vector rep = (Vector) getRepresentation(representationIdentifier);
 		return rep.getZeroVector();
 	}
+	
+	@Override
+	public void manipulate(Manipulator manipulator){
+		
+	}
 }

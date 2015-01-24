@@ -16,6 +16,7 @@
 package it.uniroma2.sag.kelp.data.dataset;
 
 import it.uniroma2.sag.kelp.data.example.Example;
+import it.uniroma2.sag.kelp.data.example.Manipulator;
 import it.uniroma2.sag.kelp.data.label.Label;
 import it.uniroma2.sag.kelp.data.label.NumericLabel;
 import it.uniroma2.sag.kelp.data.representation.Vector;
@@ -411,6 +412,16 @@ public class SimpleDataset implements Dataset {
 	public Vector getZeroVector(String representationIdentifier) {
 		Example example = this.examples.get(0);
 		return example.getZeroVector(representationIdentifier);
+	}
+
+	@Override
+	public void manipulate(List<Manipulator> manipulators) {
+		for(Example example : this.examples){
+			for(Manipulator manipulator : manipulators){
+				example.manipulate(manipulator);
+			}
+		}
+		
 	}
 
 }
