@@ -178,6 +178,6 @@ public class SimpleExample extends Example {
 	
 	@Override
 	public void manipulate(Manipulator manipulator){
-		
+		manipulator.manipulate(this);
 	}
 }
