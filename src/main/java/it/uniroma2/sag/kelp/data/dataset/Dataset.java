@@ -149,10 +149,12 @@ public interface Dataset {
 	public void setSeed(long seed);
 	
 	/**
-	 * Manipulates all the examples in the dataset accordingly to the strategies defined by the given <code>manipulators</code>
+	 * Manipulates all the examples in the dataset accordingly to the strategies defined by the given <code>manipulators</code>. 
+	 * <br><br>NOTE: If more than one manipulator is adopted, they will be applied in the same order of the <code>manipulator</code> in the array  
+	 * 
 	 * 
 	 * @param manipulators the manipulators that must be applied to all the examples in the dataset
 	 */
-	public void manipulate(List<Manipulator> manipulators);
+	public void manipulate(Manipulator... manipulators);
 		
 }

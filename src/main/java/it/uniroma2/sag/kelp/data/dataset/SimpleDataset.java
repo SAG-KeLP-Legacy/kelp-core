@@ -415,7 +415,7 @@ public class SimpleDataset implements Dataset {
 	}
 
 	@Override
-	public void manipulate(List<Manipulator> manipulators) {
+	public void manipulate(Manipulator... manipulators) {
 		for(Example example : this.examples){
 			for(Manipulator manipulator : manipulators){
 				example.manipulate(manipulator);
