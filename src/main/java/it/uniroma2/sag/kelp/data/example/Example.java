@@ -17,6 +17,7 @@ package it.uniroma2.sag.kelp.data.example;
 
 import it.uniroma2.sag.kelp.data.label.Label;
 import it.uniroma2.sag.kelp.data.label.NumericLabel;
+import it.uniroma2.sag.kelp.data.manipulator.Manipulator;
 import it.uniroma2.sag.kelp.data.representation.Representation;
 import it.uniroma2.sag.kelp.data.representation.Vector;
 
@@ -255,14 +256,6 @@ public abstract class Example implements Serializable {
 	public Example clone() {
 		return SerializationUtils.clone(this);
 	}
-	
-	/**
-	 * Forces every representation of this example to be a unit vector in its
-	 * explicit feature space
-	 * <p>
-	 * Note: some representations cannot be normalized
-	 */
-	public abstract void normalize();
 	
 	protected String getTextualLabelPart(){
 		String ret = "";

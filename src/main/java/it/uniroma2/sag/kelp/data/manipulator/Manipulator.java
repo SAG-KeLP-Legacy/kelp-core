@@ -13,7 +13,9 @@
  * limitations under the License.
  */
 
-package it.uniroma2.sag.kelp.data.example;
+package it.uniroma2.sag.kelp.data.manipulator;
+
+import it.uniroma2.sag.kelp.data.example.Example;
 
 /**
  * It is an example manipulator, i.e. an object implementing a strategy to modify the example representations

@@ -20,6 +20,7 @@ import java.util.Map.Entry;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import it.uniroma2.sag.kelp.data.example.Example;
+import it.uniroma2.sag.kelp.data.manipulator.Manipulator;
 import it.uniroma2.sag.kelp.data.representation.Representation;
 import it.uniroma2.sag.kelp.data.representation.Vector;
 
@@ -62,12 +63,6 @@ public class ExamplePair extends SimpleExample{
 	 */
 	public Example getRightExample(){
 		return this.rightExample;
-	}
-
-	@Override
-	public void normalize() {
-		this.leftExample.normalize();
-		this.rightExample.normalize();		
 	}
 
 	@Override

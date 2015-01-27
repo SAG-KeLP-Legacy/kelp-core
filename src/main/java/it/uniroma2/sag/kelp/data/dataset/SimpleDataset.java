@@ -16,9 +16,9 @@
 package it.uniroma2.sag.kelp.data.dataset;
 
 import it.uniroma2.sag.kelp.data.example.Example;
-import it.uniroma2.sag.kelp.data.example.Manipulator;
 import it.uniroma2.sag.kelp.data.label.Label;
 import it.uniroma2.sag.kelp.data.label.NumericLabel;
+import it.uniroma2.sag.kelp.data.manipulator.Manipulator;
 import it.uniroma2.sag.kelp.data.representation.Vector;
 
 import java.util.ArrayList;
@@ -321,14 +321,6 @@ public class SimpleDataset implements Dataset {
 	@Override
 	public List<Example> getExamples() {
 		return this.examples;
-	}
-
-	@Override
-	public void normalizeExamples() {
-		for (Example ex : this.examples) {
-			ex.normalize();
-		}
-
 	}
 
 	/**

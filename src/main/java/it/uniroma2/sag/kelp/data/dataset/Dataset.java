@@ -16,8 +16,8 @@
 package it.uniroma2.sag.kelp.data.dataset;
 
 import it.uniroma2.sag.kelp.data.example.Example;
-import it.uniroma2.sag.kelp.data.example.Manipulator;
 import it.uniroma2.sag.kelp.data.label.Label;
+import it.uniroma2.sag.kelp.data.manipulator.Manipulator;
 import it.uniroma2.sag.kelp.data.representation.Vector;
 
 import java.util.List;
@@ -106,16 +106,6 @@ public interface Dataset {
 	 * @return the stored examples
 	 */
 	public List<Example> getExamples();
-
-	
-	/**
-	 * It will force every representation of every examples to be a unit vector
-	 * in its explicit feature space.
-	 * <p>
-	 * Note: some representations cannot be normalized (for instance a
-	 * <code>TreeRepresentation</code>
-	 */
-	public void normalizeExamples();
 	
 	/**
 	 * Returns a zero vector compliant with the representation identifier by <code>representationIdentifier</code> containings all zero
