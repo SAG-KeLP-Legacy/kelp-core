@@ -23,6 +23,7 @@ package it.uniroma2.sag.kelp.data.label;
  */
 public class NumericLabel implements Label {
 	
+	private static final long serialVersionUID = 9106999750323023354L;
 	private float value;
 	private Label property;
 
