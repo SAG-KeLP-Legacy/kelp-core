@@ -21,6 +21,8 @@ import it.uniroma2.sag.kelp.data.label.Label;
 import it.uniroma2.sag.kelp.data.label.NumericLabel;
 import it.uniroma2.sag.kelp.data.representation.Vector;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -422,6 +424,25 @@ public class SimpleDataset implements Dataset {
 			}
 		}
 		
+	}
+	
+	/**
+	 * Save the dataset in a file. <br>
+	 * <b>NOTE</b>: if the filename ends with ".gz" the file will be compressed
+	 * through GZIP.
+	 * 
+	 * @param outputFilePath
+	 *            the file path
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public void save(String outputFilePath) throws FileNotFoundException,
+			IOException {
+		DatasetWriter datasetWriter = new DatasetWriter(outputFilePath);
+		for (Example e : getExamples()) {
+			datasetWriter.writeNextExample(e);
+		}
+		datasetWriter.close();
 	}
 
 }
