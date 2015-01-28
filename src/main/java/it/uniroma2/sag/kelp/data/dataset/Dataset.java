@@ -17,6 +17,7 @@ package it.uniroma2.sag.kelp.data.dataset;
 
 import it.uniroma2.sag.kelp.data.example.Example;
 import it.uniroma2.sag.kelp.data.label.Label;
+import it.uniroma2.sag.kelp.data.manipulator.Manipulator;
 import it.uniroma2.sag.kelp.data.representation.Vector;
 
 import java.util.List;
@@ -105,16 +106,6 @@ public interface Dataset {
 	 * @return the stored examples
 	 */
 	public List<Example> getExamples();
-
-	
-	/**
-	 * It will force every representation of every examples to be a unit vector
-	 * in its explicit feature space.
-	 * <p>
-	 * Note: some representations cannot be normalized (for instance a
-	 * <code>TreeRepresentation</code>
-	 */
-	public void normalizeExamples();
 	
 	/**
 	 * Returns a zero vector compliant with the representation identifier by <code>representationIdentifier</code> containings all zero
@@ -141,10 +132,19 @@ public interface Dataset {
 	public Dataset getShuffledDataset();
 	
 	/**
-	 *  Sets the seed of the random generator used to shuffling examples and getting random examples
+	 * Sets the seed of the random generator used to shuffling examples and getting random examples
 	 * 
 	 * @param seed the seed of the random generator
 	 */
 	public void setSeed(long seed);
+	
+	/**
+	 * Manipulates all the examples in the dataset accordingly to the strategies defined by the given <code>manipulators</code>. 
+	 * <br><br>NOTE: If more than one manipulator is adopted, they will be applied in the same order of the <code>manipulator</code> in the array  
+	 * 
+	 * 
+	 * @param manipulators the manipulators that must be applied to all the examples in the dataset
+	 */
+	public void manipulate(Manipulator... manipulators);
 		
 }

@@ -18,8 +18,11 @@ package it.uniroma2.sag.kelp.data.dataset;
 import it.uniroma2.sag.kelp.data.example.Example;
 import it.uniroma2.sag.kelp.data.label.Label;
 import it.uniroma2.sag.kelp.data.label.NumericLabel;
+import it.uniroma2.sag.kelp.data.manipulator.Manipulator;
 import it.uniroma2.sag.kelp.data.representation.Vector;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -322,14 +325,6 @@ public class SimpleDataset implements Dataset {
 		return this.examples;
 	}
 
-	@Override
-	public void normalizeExamples() {
-		for (Example ex : this.examples) {
-			ex.normalize();
-		}
-
-	}
-
 	/**
 	 * This method extracts examples of given {@code labels} from
 	 * {@code dataset}
@@ -411,6 +406,35 @@ public class SimpleDataset implements Dataset {
 	public Vector getZeroVector(String representationIdentifier) {
 		Example example = this.examples.get(0);
 		return example.getZeroVector(representationIdentifier);
+	}
+
+	@Override
+	public void manipulate(Manipulator... manipulators) {
+		for(Example example : this.examples){
+			for(Manipulator manipulator : manipulators){
+				example.manipulate(manipulator);
+			}
+		}
+		
+	}
+	
+	/**
+	 * Save the dataset in a file. <br>
+	 * <b>NOTE</b>: if the filename ends with ".gz" the file will be compressed
+	 * through GZIP.
+	 * 
+	 * @param outputFilePath
+	 *            the file path
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public void save(String outputFilePath) throws FileNotFoundException,
+			IOException {
+		DatasetWriter datasetWriter = new DatasetWriter(outputFilePath);
+		for (Example e : getExamples()) {
+			datasetWriter.writeNextExample(e);
+		}
+		datasetWriter.close();
 	}
 
 }

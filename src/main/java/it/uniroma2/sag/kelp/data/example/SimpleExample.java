@@ -16,7 +16,7 @@
 package it.uniroma2.sag.kelp.data.example;
 
 import it.uniroma2.sag.kelp.data.label.Label;
-import it.uniroma2.sag.kelp.data.representation.Normalizable;
+import it.uniroma2.sag.kelp.data.manipulator.Manipulator;
 import it.uniroma2.sag.kelp.data.representation.Representation;
 import it.uniroma2.sag.kelp.data.representation.Vector;
 
@@ -129,18 +129,6 @@ public class SimpleExample extends Example {
 		return true;
 	}
 	
-	/**
-	 * Normalize each normalizable representation of this example
-	 */
-	@Override
-	public void normalize() {
-		for(Representation rep : this.representations.values()){
-			if(rep instanceof Normalizable){
-				((Normalizable)rep).normalize();
-			}
-		}
-	}
-	
 	@Override
 	public String toString() {
 		String ret = this.getTextualLabelPart();
@@ -174,5 +162,10 @@ public class SimpleExample extends Example {
 	public Vector getZeroVector(String representationIdentifier) {
 		Vector rep = (Vector) getRepresentation(representationIdentifier);
 		return rep.getZeroVector();
+	}
+	
+	@Override
+	public void manipulate(Manipulator manipulator){
+		manipulator.manipulate(this);
 	}
 }

@@ -63,17 +63,23 @@ public abstract class Kernel {
 	public final float innerProduct(Example exA, Example exB) {
 		this.numberOfKernelComputations++;
 		float kernelResult;
+		Example first = exA;
+		Example second = exB;
+		if(exA.getId()> exB.getId()){
+			first=exB;
+			second = exA;
+		}
 		if (this.cache != null) {
-			Float cacheValue = this.cache.getKernelValue(exA, exB);
+			Float cacheValue = this.cache.getKernelValue(first, second);
 			if (cacheValue != null) {
 				this.numberOfHits++;
 				kernelResult = cacheValue.floatValue();
 			} else {
-				kernelResult = this.kernelComputation(exA, exB);
-				this.cache.setKernelValue(exA, exB, kernelResult);
+				kernelResult = this.kernelComputation(first, second);
+				this.cache.setKernelValue(first, second, kernelResult);
 			}
 		} else {
-			kernelResult = this.kernelComputation(exA, exB);
+			kernelResult = this.kernelComputation(first, second);
 		}
 		return kernelResult;
 	}
