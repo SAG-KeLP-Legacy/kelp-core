@@ -16,6 +16,8 @@
 package it.uniroma2.sag.kelp.data.label;
 
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 
@@ -27,7 +29,7 @@ import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.CUSTOM, include = JsonTypeInfo.As.PROPERTY, property = "labelType")
 @JsonTypeIdResolver(LabelTypeResolver.class)
-public interface Label{	
+public interface Label extends Serializable {	
 
 	@Override
 	public boolean equals(Object label);
