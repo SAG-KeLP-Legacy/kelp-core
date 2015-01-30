@@ -28,7 +28,8 @@ import it.uniroma2.sag.kelp.predictionfunction.Prediction;
 public class BinaryClassificationEvaluator extends Evaluator {
 	private Label positiveLabel;
 	
-	private int total, correctAcc, correctForF1, predictedForF1; 
+	private int total, correctAcc, correctForF1, predictedForF1,
+			positiveCounter;
 	private float accuracy, precision, recall, f1;
 	
 	public BinaryClassificationEvaluator(Label positiveClass) {
@@ -50,6 +51,8 @@ public class BinaryClassificationEvaluator extends Evaluator {
 
 	public void addCount(Example test, Prediction prediction) {
 		total++;
+		if(test.isExampleOf(positiveLabel))
+			positiveCounter++;
 		if (prediction.getScore(positiveLabel) >= 0)
 			predictedForF1++;
 		if (prediction.getScore(positiveLabel) >= 0
@@ -63,7 +66,7 @@ public class BinaryClassificationEvaluator extends Evaluator {
 
 	public void compute() {		
 		precision = (float) correctForF1 / (float) predictedForF1;
-		recall = (float) correctForF1 / (float) total;
+		recall = (float) correctForF1 / (float) positiveCounter;
 		f1 = 2 * precision * recall
 				/ (precision + recall);
 
