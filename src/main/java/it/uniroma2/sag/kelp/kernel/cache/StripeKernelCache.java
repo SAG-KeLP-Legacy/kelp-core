@@ -120,7 +120,7 @@ public class StripeKernelCache extends KernelCache implements Serializable {
 	 * @param maxDimensionSize
 	 *            The maximum number of columns in the matrix
 	 */
-	private StripeKernelCache(int maxNumberOfItems, int maxDimensionSize) {
+	public StripeKernelCache(int maxNumberOfItems, int maxDimensionSize) {
 
 		this.maxNumberOfItems = maxNumberOfItems;
 
