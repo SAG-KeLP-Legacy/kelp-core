@@ -75,5 +75,5 @@ public abstract class DirectKernel<T extends Representation> extends Kernel {
 	 * @param repB the second representation in the kernel similarity
 	 * @return the kernel similarity
 	 */
-	protected abstract float kernelComputation(T repA, T repB);
+	public abstract float kernelComputation(T repA, T repB);
 }
