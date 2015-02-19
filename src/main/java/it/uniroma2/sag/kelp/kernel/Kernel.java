@@ -15,10 +15,19 @@
 
 package it.uniroma2.sag.kelp.kernel;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 
 import it.uniroma2.sag.kelp.data.example.Example;
@@ -213,5 +222,55 @@ public abstract class Kernel {
 		this.numberOfHits=0;
 		this.numberOfKernelComputations=0;
 	}
+	
+	/**
+	 * Save the input kernel in a file. If the .gz extension is specified, the
+	 * file is compressed.
+	 * 
+	 * @param kernel
+	 *            The input kernel
+	 * @param outputFilePath
+	 *            The output file path
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public static void save(Kernel kernel, String outputFilePath)
+			throws FileNotFoundException, IOException {
+		ObjectMapper mapper = new ObjectMapper();
+
+		if (outputFilePath.endsWith(".gz")) {
+			GZIPOutputStream zip = new GZIPOutputStream(new FileOutputStream(
+					new File(outputFilePath)));
+			mapper.writeValue(zip, kernel);
+		} else {
+			mapper.writeValue(new File(outputFilePath), kernel);
+		}
+
+	}
+
+	/**
+	 * Load a kernel function from a file path. If the .gz extension is
+	 * specified, the file considered compressed.
+	 * 
+	 * @param kernel
+	 *            The input kernel
+	 * @param outputFilePath
+	 *            The output file path
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public static Kernel load(String inputFilePath)
+			throws FileNotFoundException, IOException {
+		ObjectMapper mapper = new ObjectMapper();
+
+		if (inputFilePath.endsWith(".gz")) {
+			GZIPInputStream zip = new GZIPInputStream(new FileInputStream(
+					new File(inputFilePath)));
+			return mapper.readValue(zip, Kernel.class);
+		} else {
+			return mapper.readValue(new File(inputFilePath), Kernel.class);
+		}
+	}
+	
 
 }
