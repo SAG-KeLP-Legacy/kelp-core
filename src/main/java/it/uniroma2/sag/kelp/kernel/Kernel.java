@@ -113,9 +113,19 @@ public abstract class Kernel {
 	 * @param cache
 	 *            the cache for the kernel operations
 	 */
-	@JsonIgnore
 	public void setKernelCache(KernelCache cache) {
 		this.cache = cache;
+	}
+	
+	/**
+	 * Returns the cache in which storing the kernel operations in the RKHS defined
+	 * by this kernel
+	 * 
+	 * @param cache
+	 *            the cache for the kernel operations
+	 */
+	public KernelCache getKernelCache() {
+		return this.cache;
 	}
 
 	/**

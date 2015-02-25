@@ -17,12 +17,21 @@ package it.uniroma2.sag.kelp.kernel.cache;
 
 import it.uniroma2.sag.kelp.data.example.Example;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
+
 
 /**
  * Generic Cache for kernel computations 
  * 
  * @author      Simone Filice
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.CUSTOM, include = JsonTypeInfo.As.PROPERTY, property = "cacheType")
+@JsonTypeIdResolver(KernelCacheTypeResolver.class)
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "cacheID")
 public abstract class KernelCache {
 
 	private long cacheHit=0;
@@ -58,6 +67,7 @@ public abstract class KernelCache {
 	/**
 	 * @return the number of cache hits
 	 */
+	@JsonIgnore
 	public long getCacheHits(){
 		return this.cacheHit;
 	}
@@ -65,6 +75,7 @@ public abstract class KernelCache {
 	/**
 	 * @return the number of cache misses
 	 */
+	@JsonIgnore
 	public long getCacheMisses(){
 		return this.cacheMiss;
 	}
@@ -72,6 +83,7 @@ public abstract class KernelCache {
 	/**
 	 * Sets cache hits and misses to 0
 	 */
+	@JsonIgnore
 	public void resetCacheStats(){
 		this.cacheHit=0;
 		this.cacheMiss=0;

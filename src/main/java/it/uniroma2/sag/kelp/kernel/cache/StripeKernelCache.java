@@ -25,11 +25,14 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
 /**
- * Given a dataset, this cache stores kernel computations is "Stripes". The
- * cache has been designed to store all kernel computations between an
- * <code>Example</code> <code>i</code> and all the remaining examples from the
- * <code>Dataset</code>. To reduce the requirement of memory space, the cache
+ * Given a dataset, this cache stores kernel computations in "Stripes", i.e.
+ * whole rows of the complete Gram Matrix. In other words given a subset S of 
+ * the examples in the dataset D, the cache is able to store all the kernel computations 
+ * between any example in S and any example in D.
+ * To reduce the requirement of memory space, the cache
  * stores only <code>n</code> stripes. When the number of stripes is exceeded,
  * they are removed according to a FIFO policy.
  * 
@@ -37,6 +40,7 @@ import java.util.Queue;
  * @author Danilo Croce
  * 
  */
+@JsonTypeName("stripe")
 public class StripeKernelCache extends KernelCache implements Serializable {
 
 	private static final long serialVersionUID = -4040974882736610829L;
@@ -51,13 +55,13 @@ public class StripeKernelCache extends KernelCache implements Serializable {
 	/**
 	 * The maximum number of stripes that can be added to the cache
 	 */
-	private int maxNumberOfItems;
+	private int maxNumberOfRows;
 
 	/**
-	 * The maximum of examples that can be added to the cache (i.e. the matrix
+	 * The maximum number of different examples that can be added to the cache (i.e. the matrix
 	 * columns in the matrix buffer). This size cannot be exceed.
 	 */
-	private int maxDimensionSize;
+	private int numberOfColumns;
 
 	/**
 	 * An array of vector containing the kernel values. Each row i in the matrix
@@ -110,22 +114,23 @@ public class StripeKernelCache extends KernelCache implements Serializable {
 	 * @param maxNumberOfItems
 	 *            The maximum number of stripes in the dataset
 	 */
-	public StripeKernelCache(Dataset dataset, int maxNumberOfItems) {
-		this(maxNumberOfItems, dataset.getNumberOfExamples());
+	public StripeKernelCache(Dataset dataset, int maxNumberOfRows) {
+		this(maxNumberOfRows, dataset.getNumberOfExamples());
 	}
 
 	/**
-	 * @param maxNumberOfItems
-	 *            The maximum number of stripes in the dataset
-	 * @param maxDimensionSize
+	 * @param maxNumberOfRows
+	 *            The maximum number of stripes in the matrix
+	 * @param numberOfColumns
 	 *            The maximum number of columns in the matrix
 	 */
-	public StripeKernelCache(int maxNumberOfItems, int maxDimensionSize) {
-
-		this.maxNumberOfItems = maxNumberOfItems;
-
-		this.maxDimensionSize = maxDimensionSize;
-
+	public StripeKernelCache(int maxNumberOfRows, int numberOfColumns) {
+		this();
+		setNumberOfColumns(numberOfColumns);
+		setMaxNumberOfRows(maxNumberOfRows);
+	}
+	
+	public StripeKernelCache(){
 		this.matrixColumnIndex = 0;
 
 		this.freeRowsIds = new ArrayList<Integer>();
@@ -133,14 +138,41 @@ public class StripeKernelCache extends KernelCache implements Serializable {
 
 		this.rowDict = new TLongIntHashMap();
 		this.columnDict = new TLongIntHashMap();
+	}
+	
+	/**
+	 * @return the maxNumberOfRows
+	 */
+	public int getMaxNumberOfRows() {
+		return maxNumberOfRows;
+	}
 
-		this.buffer = new float[this.maxNumberOfItems][];
+	/**
+	 * @param maxNumberOfRows the maxNumberOfRows to set
+	 */
+	public void setMaxNumberOfRows(int maxNumberOfRows) {
+		this.maxNumberOfRows = maxNumberOfRows;
+		this.buffer = new float[this.maxNumberOfRows][];
 
 		for (int rowId = 0; rowId < buffer.length; rowId++) {
 			freeRowsIds.add(rowId);
 		}
-
 	}
+
+	/**
+	 * @return the numberOfColumns
+	 */
+	public int getNumberOfColumns() {
+		return numberOfColumns;
+	}
+
+	/**
+	 * @param numberOfColumns the numberOfColumns to set
+	 */
+	public void setNumberOfColumns(int numberOfColumns) {
+		this.numberOfColumns = numberOfColumns;
+	}
+
 
 	/**
 	 * This function retrieves the kernel values from the matrix by using the
@@ -181,10 +213,10 @@ public class StripeKernelCache extends KernelCache implements Serializable {
 			// Each element should be added as column in the kernel buffer, so
 			// it is
 			// expected to find a free column in the matrix.
-			if (matrixColumnIndex == maxDimensionSize) {
+			if (matrixColumnIndex == numberOfColumns) {
 				info("The example " + indexB
 						+ " cannot be stored because the matrix (of size "
-						+ maxDimensionSize + " is full");
+						+ numberOfColumns + " is full");
 				return;
 			}
 			// Add to the dict a mapping between the example and the row in the
@@ -224,7 +256,7 @@ public class StripeKernelCache extends KernelCache implements Serializable {
 			rowId = this.freeRowsIds.get(0);
 			this.freeRowsIds.remove(0);
 			if (this.buffer[rowId] == null)
-				this.buffer[rowId] = new float[this.maxDimensionSize];
+				this.buffer[rowId] = new float[this.numberOfColumns];
 			Arrays.fill(this.buffer[rowId], INVALID_KERNEL_VALUE);
 			this.examplesIdQueue.add(indexA);
 
