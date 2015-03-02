@@ -15,6 +15,11 @@
 
 package it.uniroma2.sag.kelp.kernel.cache;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
+
 import it.uniroma2.sag.kelp.data.example.Example;
 
 /**
@@ -22,6 +27,9 @@ import it.uniroma2.sag.kelp.data.example.Example;
  * 
  * @author      Simone Filice
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.CUSTOM, include = JsonTypeInfo.As.PROPERTY, property = "cacheType")
+@JsonTypeIdResolver(SquaredNormCacheTypeResolver.class)
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "cacheID")
 public interface SquaredNormCache {
 
 	/**

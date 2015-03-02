@@ -28,7 +28,9 @@ import it.uniroma2.sag.kelp.data.example.Example;
 
 import java.util.Arrays;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
+@JsonTypeName("fixIndex")
 public class FixIndexSquaredNormCache implements SquaredNormCache{
 	
 	private int size;
@@ -42,12 +44,37 @@ public class FixIndexSquaredNormCache implements SquaredNormCache{
 	 * @param cacheSize the number of squared norms the cache can simultaneously store
 	 */
 	public FixIndexSquaredNormCache(int cacheSize){
+		this.setSize(cacheSize);
+	}
+	
+	public FixIndexSquaredNormCache(){
+		
+	}
+		
+	/**
+	 * Returns the size of the cache, i.e. the number of norms that can be simultaneously stored
+	 * 
+	 * @return the size of the cache
+	 */
+	public int getSize() {
+		return size;
+	}
+
+	/**
+	 * Sets the size of the cache, i.e. the number of norms that can be simultaneously stored
+	 * 
+	 * @param size the size to set
+	 * 
+	 * <p>
+	 * NOTE: when this methods is invoked, the cache is initialized from scratch, so all the currently stored norms 
+	 * will be lost 
+	 */
+	public void setSize(int cacheSize) {
 		this.size=cacheSize;
 		this.normValues = new float[cacheSize];
 		this.storedExample = new long[cacheSize];
 		Arrays.fill(storedExample, INVALID_EXAMPLE_VALUE);
 	}
-		
 	
 	@Override
 	public Float getSquaredNorm(Example example){

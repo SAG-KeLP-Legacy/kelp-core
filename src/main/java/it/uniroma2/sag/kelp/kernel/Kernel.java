@@ -94,16 +94,24 @@ public abstract class Kernel {
 	}
 
 	/**
-	 * Sets the cache in which storing the quadratic norms in the RKHS defined
+	 * Sets the cache in which storing the squared norms in the RKHS defined
 	 * by this kernel
 	 * 
 	 * @param normCache
-	 *            the cache for the quadratic norms
+	 *            the cache for the squared norms
 	 */
-	@JsonIgnore
-
-	public void setNormCache(SquaredNormCache normCache){
+	public void setSquaredNormCache(SquaredNormCache normCache){
 		this.normCache= normCache;
+	}
+	
+	/**
+	 * Returns the cache in which storing the squared norms in the RKHS defined
+	 * by this kernel
+	 * 
+	 * @return the cache for the squared norms
+	 */
+	public SquaredNormCache getSquaredNormCache(){
+		return this.normCache;
 	}
 
 	/**
