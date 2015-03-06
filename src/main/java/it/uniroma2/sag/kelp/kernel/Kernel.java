@@ -47,10 +47,10 @@ public abstract class Kernel {
 
 	@JsonIgnore
 	private long numberOfKernelComputations=0;
-	
+
 	@JsonIgnore
 	private long numberOfHits=0;
-	
+
 	@JsonIgnore
 	private SquaredNormCache normCache=null;
 
@@ -80,14 +80,14 @@ public abstract class Kernel {
 		}
 		if (this.cache != null) {
 			Float cacheValue = this.cache.getKernelValue(first, second);
-			if (cacheValue != null) {
+			if(cacheValue != null){
 				this.numberOfHits++;
 				kernelResult = cacheValue.floatValue();
-			} else {
+			}else{
 				kernelResult = this.kernelComputation(first, second);
 				this.cache.setKernelValue(first, second, kernelResult);
 			}
-		} else {
+		}else{
 			kernelResult = this.kernelComputation(first, second);
 		}
 		return kernelResult;
@@ -103,7 +103,7 @@ public abstract class Kernel {
 	public void setSquaredNormCache(SquaredNormCache normCache){
 		this.normCache= normCache;
 	}
-	
+
 	/**
 	 * Returns the cache in which storing the squared norms in the RKHS defined
 	 * by this kernel
@@ -124,7 +124,7 @@ public abstract class Kernel {
 	public void setKernelCache(KernelCache cache) {
 		this.cache = cache;
 	}
-	
+
 	/**
 	 * Returns the cache in which storing the kernel operations in the RKHS defined
 	 * by this kernel
@@ -201,7 +201,7 @@ public abstract class Kernel {
 	public void disableCache() {
 		this.cache = null;
 	}	
-	
+
 	/**
 	 * Returns the number of times the kernel function has been invoked
 	 * 
@@ -211,7 +211,7 @@ public abstract class Kernel {
 	public long getKernelComputations(){
 		return numberOfKernelComputations;
 	}
-	
+
 	/**
 	 * Returns the number of times a cache hit happened
 	 * 
@@ -221,7 +221,7 @@ public abstract class Kernel {
 	public long getNumberOfHits(){
 		return numberOfHits;
 	}
-	
+
 	/**
 	 * Returns the number of times a cache miss happened
 	 * 
@@ -231,7 +231,7 @@ public abstract class Kernel {
 	public long getNumberOfMisses(){
 		return numberOfKernelComputations-numberOfHits;
 	}
-	
+
 	/**
 	 * Resets the kernel statistics (number of kernel computations,
 	 * cache hits and misses)
@@ -240,7 +240,7 @@ public abstract class Kernel {
 		this.numberOfHits=0;
 		this.numberOfKernelComputations=0;
 	}
-	
+
 	/**
 	 * Save the input kernel in a file. If the .gz extension is specified, the
 	 * file is compressed.
@@ -289,6 +289,6 @@ public abstract class Kernel {
 			return mapper.readValue(new File(inputFilePath), Kernel.class);
 		}
 	}
-	
+
 
 }
