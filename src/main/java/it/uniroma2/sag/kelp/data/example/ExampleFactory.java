@@ -100,6 +100,7 @@ public class ExampleFactory {
 				+ representationType				
 				+ identifierPart
 				+ ExampleFactory.DELIMITER
+				+ " "
 				+ representation.toString()
 				+ ExampleFactory.END_REPRESENTATION
 				+ representationType
