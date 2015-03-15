@@ -114,7 +114,7 @@ public class DynamicIndexKernelCache extends KernelCache implements Serializable
 		this.exampleLastAccess = new long[examplesToStore];
 		Arrays.fill(this.exampleLastAccess, 0);
 		this.accessesCounter=0;
-		this.examplesToDiscard = (int) (FLUSHING_PERCENTAGE*this.examplesToStore);
+		this.examplesToDiscard = (int) (FLUSHING_PERCENTAGE*this.examplesToStore)+1;
 	}
 
 	@Override
@@ -169,22 +169,32 @@ public class DynamicIndexKernelCache extends KernelCache implements Serializable
 		int positionA = this.fromExampleIdToCachePosition.get(idA);
 		int positionB = this.fromExampleIdToCachePosition.get(idB);
 
+		if(positionA!=NULL_POSITION){
+			this.exampleLastAccess[positionA] = this.accessesCounter;
+		}
+		if(positionB!=NULL_POSITION){
+			this.exampleLastAccess[positionB] = this.accessesCounter;
+		}
+		
 		if(positionA==NULL_POSITION){
 			//System.out.println("not found example " + exA.getId());
 			positionA=this.insertNewExample(idA);
-
+			
 		}
 		
 		if(positionB==NULL_POSITION){
+			if(idA==idB){
+				positionB=positionA;
+			}else{
+				positionB=this.insertNewExample(idB);
+			}
 			//System.out.println("not found example " + exA.getId());
-			positionB=this.insertNewExample(idB);
-
+			
+			
 		}
 
 		int kernelIndex=this.getKernelValueIndex(positionA, positionB);
 		this.kernelValue[kernelIndex] = value;
-		this.exampleLastAccess[positionA] = this.accessesCounter;
-		this.exampleLastAccess[positionB] = this.accessesCounter;
 		this.accessesCounter++;
 
 
@@ -199,6 +209,7 @@ public class DynamicIndexKernelCache extends KernelCache implements Serializable
 		int position = this.freePositions.remove(this.freePositions.size()-1);
 		this.fromExampleIdToCachePosition.put(exampleID, position);
 		this.fromCachePositionToExampleId.put(position, exampleID);
+		this.exampleLastAccess[position] = this.accessesCounter;
 		return position;
 	}
 	
