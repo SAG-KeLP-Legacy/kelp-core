@@ -101,6 +101,7 @@ public class ExampleFactory {
 				+ representationType				
 				+ identifierPart
 				+ ExampleFactory.DELIMITER
+				+ " "
 				+ representation.getTextFromData()
 				+ ExampleFactory.END_REPRESENTATION
 				+ representationType
