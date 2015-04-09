@@ -373,6 +373,13 @@ public class SimpleDataset implements Dataset {
 		return this.examples.get(index);
 	}
 
+	/**
+	 * @param k the number of examples to be returned
+	 * @return a list containing <code>k</code> random examples. 
+	 * 
+	 * <p>
+	 * NOTE: Duplicates are allowed
+	 */
 	@Override
 	public List<Example> getRandExamples(int k) {
 		// TODO: it can produce duplicates. Shall we fix it?!?
