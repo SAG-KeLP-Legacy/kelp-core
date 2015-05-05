@@ -54,7 +54,7 @@ public interface BinaryLearningAlgorithm extends LearningAlgorithm{
 
 
 	/**
-	 * @param positiveClass the label associated to the positive class, i.e. the list must contain a sigle entry
+	 * @param positiveClass the label associated to the positive class, i.e. the list must contain a single entry
 	 */
 	@Override
 	public void setLabels(List<Label> labels);

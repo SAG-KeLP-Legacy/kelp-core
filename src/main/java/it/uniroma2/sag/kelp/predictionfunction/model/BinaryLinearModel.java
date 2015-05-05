@@ -95,5 +95,10 @@ public class BinaryLinearModel extends BinaryModel{
 
 		return vector.getSquaredNorm();
 	}
+	
+	@Override
+	public float getSquaredNorm(){
+		return this.hyperplane.getSquaredNorm();
+	}
 
 }
