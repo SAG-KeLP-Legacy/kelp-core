@@ -28,8 +28,8 @@ import it.uniroma2.sag.kelp.predictionfunction.Prediction;
 public class BinaryClassificationEvaluator extends Evaluator {
 	private Label positiveLabel;
 	
-	private int total, correctAcc, correctForF1, predictedForF1,
-			positiveCounter;
+	private int total, correct, truePositivePredicted, predictedPositive,
+			realPositive;
 	private float accuracy, precision, recall, f1;
 	
 	public BinaryClassificationEvaluator(Label positiveClass) {
@@ -39,11 +39,11 @@ public class BinaryClassificationEvaluator extends Evaluator {
 
 	private void initializeCounters() {
 		total = 0;
-		correctAcc = 0;
+		correct = 0;
 		accuracy = 0.0f;
-		
-		correctForF1=0;
-		predictedForF1=0;
+		realPositive=0;
+		truePositivePredicted=0;
+		predictedPositive=0;
 		precision=0.0f;
 		recall=0.0f;
 		f1=0.0f;
@@ -52,25 +52,25 @@ public class BinaryClassificationEvaluator extends Evaluator {
 	public void addCount(Example test, Prediction prediction) {
 		total++;
 		if(test.isExampleOf(positiveLabel))
-			positiveCounter++;
+			realPositive++;
 		if (prediction.getScore(positiveLabel) >= 0)
-			predictedForF1++;
+			predictedPositive++;
 		if (prediction.getScore(positiveLabel) >= 0
 				&& test.isExampleOf(positiveLabel)) {
-			correctAcc++;
-			correctForF1++;
+			correct++;
+			truePositivePredicted++;
 		} else if (prediction.getScore(positiveLabel) < 0
 				&& !test.isExampleOf(positiveLabel))
-			correctAcc++;
+			correct++;
 	}
 
 	public void compute() {		
-		precision = (float) correctForF1 / (float) predictedForF1;
-		recall = (float) correctForF1 / (float) positiveCounter;
+		precision = (float) truePositivePredicted / (float) predictedPositive;
+		recall = (float) truePositivePredicted / (float) realPositive;
 		f1 = 2 * precision * recall
 				/ (precision + recall);
 
-		accuracy = (float) correctAcc / (float) total;
+		accuracy = (float) correct / (float) total;
 	}
 
 	/**
@@ -115,10 +115,10 @@ public class BinaryClassificationEvaluator extends Evaluator {
 	@Override
 	public void clear() {
 		total = 0;
-		correctAcc = 0;
+		correct = 0;
 		accuracy = 0.0f;
-		correctForF1=0;
-		predictedForF1=0;
+		truePositivePredicted=0;
+		predictedPositive=0;
 		precision=0.0f;
 		recall=0.0f;
 		f1=0.0f;
@@ -130,11 +130,11 @@ public class BinaryClassificationEvaluator extends Evaluator {
 	@SuppressWarnings("unused")
 	private void printCounters() {
 		System.out.println("Accuracy measures");
-		System.out.println("\tCorrect: " + correctAcc);
+		System.out.println("\tCorrect: " + correct);
 		System.out.println("\tTotal: " + total);
 		System.out.println("F1 measures");
-		System.out.println("\tCorrect: " + correctForF1);
-		System.out.println("\tPredicted: " + predictedForF1);
+		System.out.println("\tCorrect: " + truePositivePredicted);
+		System.out.println("\tPredicted: " + predictedPositive);
 		System.out.println("\tToBePredicted: " + total);
 	}
 }
