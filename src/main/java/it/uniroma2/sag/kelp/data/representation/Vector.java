@@ -88,6 +88,6 @@ public interface Vector extends Normalizable {
 	 * @return the non zero features
 	 */
 	@JsonIgnore
-	public Map<String, Float> getActiveFeatures();
+	public Map<String, Number> getActiveFeatures();
 
 }
