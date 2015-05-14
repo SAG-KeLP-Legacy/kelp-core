@@ -200,6 +200,7 @@ public abstract class Kernel {
 	 */
 	public void disableCache() {
 		this.cache = null;
+		this.normCache = null;
 	}	
 
 	/**
