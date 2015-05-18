@@ -81,6 +81,13 @@ public interface Vector extends Normalizable {
 	 * @return a zero vector
 	 */
 	public Vector getZeroVector();
+	
+	/**
+	 * Returns a copy of this vector. 
+	 * 
+	 * @return Vector
+	 */
+	public Vector copyVector();
 
 	/**
 	 * Returns a map containing all the non-zero features
