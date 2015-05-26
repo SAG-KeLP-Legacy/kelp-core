@@ -58,4 +58,11 @@ public abstract class BinaryModel implements Model{
 	 * @return the squared norm of a given example
 	 */
 	public abstract float getSquaredNorm(Example example);
+	
+	/**
+	 * Computes the squared norm of the hyperplane this model is based on
+	 * 
+	 * @return the squared norm of the hyperplane
+	 */
+	public abstract float getSquaredNorm();
 }

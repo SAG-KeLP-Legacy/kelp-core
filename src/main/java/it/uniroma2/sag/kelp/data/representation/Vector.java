@@ -15,9 +15,13 @@
 
 package it.uniroma2.sag.kelp.data.representation;
 
+import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * It is a Vectorial representation
- *  
+ * 
  * @author Simone Filice
  *
  */
@@ -30,6 +34,14 @@ public interface Vector extends Normalizable {
 	 * @return the dot product
 	 */
 	public float innerProduct(Vector vector);
+
+	/**
+	 * Compute the point-wise product of this vector with the one in
+	 * <code>vector</code>.
+	 * 
+	 * @param vector the vector used for the point-wise product
+	 */
+	public void pointWiseProduct(Vector vector);
 
 	/**
 	 * Add a <code>vector</code> to this vector
@@ -69,6 +81,20 @@ public interface Vector extends Normalizable {
 	 * @return a zero vector
 	 */
 	public Vector getZeroVector();
-
 	
+	/**
+	 * Returns a copy of this vector. 
+	 * 
+	 * @return Vector
+	 */
+	public Vector copyVector();
+
+	/**
+	 * Returns a map containing all the non-zero features
+	 * 
+	 * @return the non zero features
+	 */
+	@JsonIgnore
+	public Map<String, Number> getActiveFeatures();
+
 }

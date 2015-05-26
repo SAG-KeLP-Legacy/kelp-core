@@ -15,9 +15,13 @@
 
 package it.uniroma2.sag.kelp.data.example;
 
+import java.util.Map.Entry;
+
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import it.uniroma2.sag.kelp.data.example.Example;
+import it.uniroma2.sag.kelp.data.manipulator.Manipulator;
+import it.uniroma2.sag.kelp.data.representation.Representation;
 import it.uniroma2.sag.kelp.data.representation.Vector;
 
 
@@ -29,7 +33,7 @@ import it.uniroma2.sag.kelp.data.representation.Vector;
  * @author Simone Filice
  */
 @JsonTypeName("pair")
-public class ExamplePair extends Example{
+public class ExamplePair extends SimpleExample{
 	/**
 	 * 
 	 */
@@ -62,12 +66,6 @@ public class ExamplePair extends Example{
 	}
 
 	@Override
-	public void normalize() {
-		this.leftExample.normalize();
-		this.rightExample.normalize();		
-	}
-
-	@Override
 	public Vector getZeroVector(String representationIdentifier) {
 		return this.leftExample.getZeroVector(representationIdentifier);
 	}
@@ -76,6 +74,28 @@ public class ExamplePair extends Example{
 	public String toString(){
 		String ret = this.getTextualLabelPart();
 		ret += ExampleFactory.BEGIN_PAIR + leftExample.toString() + ExampleFactory.PAIR_SEPARATOR + rightExample.toString() + ExampleFactory.END_PAIR;
+		for(Entry<String, Representation> entry: this.getRepresentations().entrySet()){
+			Representation representation = entry.getValue();
+			String identifier = entry.getKey();
+			
+			ret += ExampleFactory.getTextualRepresentation(representation, identifier)					
+					+ ExampleFactory.REPRESENTATION_SEPARATOR;
+			
+		}
 		return ret;
+	}
+	
+	/**
+	 * Manipulate this example accordingly to the provided <code>manipulator</code>. The manipulation strategy is applied
+	 * both to the representations stored directly in this ExamplePair than to the ones stored in the left and right
+	 * examples
+	 * 
+	 * @param manipulator the manipulator
+	 */
+	@Override
+	public void manipulate(Manipulator manipulator){
+		super.manipulate(manipulator);
+		this.leftExample.manipulate(manipulator);
+		this.rightExample.manipulate(manipulator);
 	}
 }

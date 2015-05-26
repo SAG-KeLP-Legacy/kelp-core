@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>it.uniroma2.sag.kelp</groupId>
 	<artifactId>core</artifactId>
-	<version>1.0.0</version>
+	<version>1.1.0</version>
 	<name>MLCore</name>
 	<url>http://sag.art.uniroma2.it/demo-software/kelp/</url>
 	<organization>
@@ -120,6 +120,11 @@
 			<groupId>net.sf.trove4j</groupId>
 			<artifactId>trove4j</artifactId>
 			<version>3.0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
 		</dependency>
 	</dependencies>
 </project>

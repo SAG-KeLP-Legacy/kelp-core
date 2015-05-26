@@ -92,8 +92,10 @@ public class BinaryKernelMachineModel extends BinaryModel implements KernelMachi
 	 * 
 	 * @param supportVector the new support vector to be added
 	 */
-	public void addSupportVector(SupportVector supportVector) {	
-		this.supportVectors.add(supportVector);				
+	public void addSupportVector(SupportVector supportVector) {
+		this.fromIdToPosition.put(supportVector.getInstance().getId(), this.getNumberOfSupportVectors()+1);
+		this.supportVectors.add(supportVector);
+		
 	}
 
 	@Override
@@ -135,6 +137,21 @@ public class BinaryKernelMachineModel extends BinaryModel implements KernelMachi
 		return this.supportVectors.get(index-1);
 	}
 	
+	/**
+	 * Returns the index of the vector associated to a given instance, null the instance
+	 * is not a support vector in this model
+	 * 
+	 * @param instance the instance whose corresponding support vector must be retrieved
+	 * @return the index of the support vector corresponding to <code>instance</code>
+	 */
+	public Integer getSupportVectorIndex(Example instance){
+		int index = this.fromIdToPosition.get(instance.getId());
+		if(index==0){
+			return null;
+		}
+		return index-1;
+	}
+	
 	@Override
 	public boolean isSupportVector(Example instance){
 		return this.getSupportVector(instance)!=null;
@@ -152,9 +169,27 @@ public class BinaryKernelMachineModel extends BinaryModel implements KernelMachi
 		this.supportVectors.set(position, sv);
 		this.fromIdToPosition.put(sv.getInstance().getId(), position);
 	}
+	
+	public void substituteSupportVector(int index, Example newInstance, float newWeight){
+		//int position = this.fromIdToPosition.remove(oldSv.getInstance().getId());
+		this.supportVectors.get(index).setInstance(newInstance);
+		this.supportVectors.get(index).setWeight(newWeight);
+		this.fromIdToPosition.put(newInstance.getId(), index);
+	}
 
 	@Override
 	public int getNumberOfSupportVectors() {
 		return this.supportVectors.size();
+	}
+
+	@Override
+	public float getSquaredNorm() {
+		float sum=0;
+		for(SupportVector sv1 : this.supportVectors){
+			for(SupportVector sv2 : this.supportVectors){
+				sum+=sv1.getWeight()*sv2.getWeight()*this.kernel.innerProduct(sv1.getInstance(), sv2.getInstance());
+			}
+		}
+		return sum;
 	}
 }

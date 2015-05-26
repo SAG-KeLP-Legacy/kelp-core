@@ -15,10 +15,19 @@
 
 package it.uniroma2.sag.kelp.kernel;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 
 import it.uniroma2.sag.kelp.data.example.Example;
@@ -38,10 +47,10 @@ public abstract class Kernel {
 
 	@JsonIgnore
 	private long numberOfKernelComputations=0;
-	
+
 	@JsonIgnore
 	private long numberOfHits=0;
-	
+
 	@JsonIgnore
 	private SquaredNormCache normCache=null;
 
@@ -63,32 +72,46 @@ public abstract class Kernel {
 	public final float innerProduct(Example exA, Example exB) {
 		this.numberOfKernelComputations++;
 		float kernelResult;
+		Example first = exA;
+		Example second = exB;
+		if(exA.getId()> exB.getId()){
+			first=exB;
+			second = exA;
+		}
 		if (this.cache != null) {
-			Float cacheValue = this.cache.getKernelValue(exA, exB);
-			if (cacheValue != null) {
+			Float cacheValue = this.cache.getKernelValue(first, second);
+			if(cacheValue != null){
 				this.numberOfHits++;
 				kernelResult = cacheValue.floatValue();
-			} else {
-				kernelResult = this.kernelComputation(exA, exB);
-				this.cache.setKernelValue(exA, exB, kernelResult);
+			}else{
+				kernelResult = this.kernelComputation(first, second);
+				this.cache.setKernelValue(first, second, kernelResult);
 			}
-		} else {
-			kernelResult = this.kernelComputation(exA, exB);
+		}else{
+			kernelResult = this.kernelComputation(first, second);
 		}
 		return kernelResult;
 	}
 
 	/**
-	 * Sets the cache in which storing the quadratic norms in the RKHS defined
+	 * Sets the cache in which storing the squared norms in the RKHS defined
 	 * by this kernel
 	 * 
 	 * @param normCache
-	 *            the cache for the quadratic norms
+	 *            the cache for the squared norms
 	 */
-	@JsonIgnore
-
-	public void setNormCache(SquaredNormCache normCache){
+	public void setSquaredNormCache(SquaredNormCache normCache){
 		this.normCache= normCache;
+	}
+
+	/**
+	 * Returns the cache in which storing the squared norms in the RKHS defined
+	 * by this kernel
+	 * 
+	 * @return the cache for the squared norms
+	 */
+	public SquaredNormCache getSquaredNormCache(){
+		return this.normCache;
 	}
 
 	/**
@@ -98,9 +121,19 @@ public abstract class Kernel {
 	 * @param cache
 	 *            the cache for the kernel operations
 	 */
-	@JsonIgnore
 	public void setKernelCache(KernelCache cache) {
 		this.cache = cache;
+	}
+
+	/**
+	 * Returns the cache in which storing the kernel operations in the RKHS defined
+	 * by this kernel
+	 * 
+	 * @param cache
+	 *            the cache for the kernel operations
+	 */
+	public KernelCache getKernelCache() {
+		return this.cache;
 	}
 
 	/**
@@ -167,8 +200,9 @@ public abstract class Kernel {
 	 */
 	public void disableCache() {
 		this.cache = null;
+		this.normCache = null;
 	}	
-	
+
 	/**
 	 * Returns the number of times the kernel function has been invoked
 	 * 
@@ -178,7 +212,7 @@ public abstract class Kernel {
 	public long getKernelComputations(){
 		return numberOfKernelComputations;
 	}
-	
+
 	/**
 	 * Returns the number of times a cache hit happened
 	 * 
@@ -188,7 +222,7 @@ public abstract class Kernel {
 	public long getNumberOfHits(){
 		return numberOfHits;
 	}
-	
+
 	/**
 	 * Returns the number of times a cache miss happened
 	 * 
@@ -198,7 +232,7 @@ public abstract class Kernel {
 	public long getNumberOfMisses(){
 		return numberOfKernelComputations-numberOfHits;
 	}
-	
+
 	/**
 	 * Resets the kernel statistics (number of kernel computations,
 	 * cache hits and misses)
@@ -207,5 +241,55 @@ public abstract class Kernel {
 		this.numberOfHits=0;
 		this.numberOfKernelComputations=0;
 	}
+
+	/**
+	 * Save the input kernel in a file. If the .gz extension is specified, the
+	 * file is compressed.
+	 * 
+	 * @param kernel
+	 *            The input kernel
+	 * @param outputFilePath
+	 *            The output file path
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public static void save(Kernel kernel, String outputFilePath)
+			throws FileNotFoundException, IOException {
+		ObjectMapper mapper = new ObjectMapper();
+
+		if (outputFilePath.endsWith(".gz")) {
+			GZIPOutputStream zip = new GZIPOutputStream(new FileOutputStream(
+					new File(outputFilePath)));
+			mapper.writeValue(zip, kernel);
+		} else {
+			mapper.writeValue(new File(outputFilePath), kernel);
+		}
+
+	}
+
+	/**
+	 * Load a kernel function from a file path. If the .gz extension is
+	 * specified, the file considered compressed.
+	 * 
+	 * @param kernel
+	 *            The input kernel
+	 * @param outputFilePath
+	 *            The output file path
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public static Kernel load(String inputFilePath)
+			throws FileNotFoundException, IOException {
+		ObjectMapper mapper = new ObjectMapper();
+
+		if (inputFilePath.endsWith(".gz")) {
+			GZIPInputStream zip = new GZIPInputStream(new FileInputStream(
+					new File(inputFilePath)));
+			return mapper.readValue(zip, Kernel.class);
+		} else {
+			return mapper.readValue(new File(inputFilePath), Kernel.class);
+		}
+	}
+
 
 }

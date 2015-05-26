@@ -19,9 +19,11 @@ import it.uniroma2.sag.kelp.data.example.ExampleFactory;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.FileReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.util.zip.GZIPInputStream;
 
 /**
  * A utility class to read dataset in the platform format.
@@ -35,14 +37,26 @@ public class DatasetReader {
 	private String filename;
 
 	public DatasetReader(String filename) throws IOException {
-		InputStreamReader reader = new InputStreamReader(new FileInputStream(
-				filename), "UTF8");
-
-		this.inputBuffer = new BufferedReader(reader);
+		this.inputBuffer=openBufferedReader(filename);
 		this.hasNextRow = true;
 		this.nextRow = this.inputBuffer.readLine();
 		this.checkRowValidity();
 		this.filename = filename;
+	}
+
+	private BufferedReader openBufferedReader(String filename) throws IOException,
+			FileNotFoundException, UnsupportedEncodingException {
+		InputStreamReader reader = null;
+		GZIPInputStream gzis = null;
+		if (filename.endsWith(".gz")) {
+			gzis = new GZIPInputStream(new FileInputStream(filename));
+			reader = new InputStreamReader(gzis, "UTF8");
+		} else {
+			reader = new InputStreamReader(new FileInputStream(filename),
+					"UTF8");
+		}
+
+		return new BufferedReader(reader);
 	}
 
 	/**
@@ -51,11 +65,8 @@ public class DatasetReader {
 	 * @throws IOException
 	 */
 	public void restartReading() throws IOException {
-		this.inputBuffer.close();
-		FileReader file;
-		file = new FileReader(filename);
-
-		this.inputBuffer = new BufferedReader(file);
+		this.close();
+		this.inputBuffer = openBufferedReader(filename);
 		this.hasNextRow = true;
 		this.nextRow = this.inputBuffer.readLine();
 		this.checkRowValidity();

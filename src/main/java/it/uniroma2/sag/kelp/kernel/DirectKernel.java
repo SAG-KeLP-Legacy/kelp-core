@@ -15,7 +15,6 @@
 package it.uniroma2.sag.kelp.kernel;
 
 import it.uniroma2.sag.kelp.data.example.Example;
-import it.uniroma2.sag.kelp.data.example.SimpleExample;
 import it.uniroma2.sag.kelp.data.representation.Representation;
 
 /**
@@ -63,14 +62,9 @@ public abstract class DirectKernel<T extends Representation> extends Kernel {
 	@SuppressWarnings("unchecked")
 	@Override
 	protected float kernelComputation(Example exA, Example exB) {
-		if (exA instanceof SimpleExample && exB instanceof SimpleExample) {
-			SimpleExample exampleA = (SimpleExample) exA;
-			SimpleExample exampleB = (SimpleExample) exB;
-			return kernelComputation((T)exampleA.getRepresentation(representation), (T)exampleB.getRepresentation(representation));
-		} else {
-			throw new java.lang.IllegalArgumentException(
-					"Invalid object: expected two SimpleExamples to performe the inner product");
-		}
+		
+		return kernelComputation((T)exA.getRepresentation(representation), (T)exB.getRepresentation(representation));
+		
 
 	}
 	
@@ -81,5 +75,5 @@ public abstract class DirectKernel<T extends Representation> extends Kernel {
 	 * @param repB the second representation in the kernel similarity
 	 * @return the kernel similarity
 	 */
-	protected abstract float kernelComputation(T repA, T repB);
+	public abstract float kernelComputation(T repA, T repB);
 }

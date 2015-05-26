@@ -33,7 +33,9 @@ import it.uniroma2.sag.kelp.data.example.Example;
 import java.io.Serializable;
 import java.util.Arrays;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
+@JsonTypeName("fixIndex")
 public class FixIndexKernelCache extends KernelCache implements Serializable{
 
 	
@@ -43,6 +45,7 @@ public class FixIndexKernelCache extends KernelCache implements Serializable{
 	
 	private int cacheSize;//the number of kernel computations that can be stored
 	private int examplesToStore;
+
 	private long [] cachedExample;
 	private float [] kernelValue;
 	
@@ -55,13 +58,38 @@ public class FixIndexKernelCache extends KernelCache implements Serializable{
 	 */
 	public FixIndexKernelCache(int examplesToStore){
 		super();
+		setExamplesToStore(examplesToStore);
+	}
+	
+	public FixIndexKernelCache(){
+		super();
+	}
+	
+	/**
+	 * Returns the maximum number of examples whose pairwise kernel computations
+	 * can be simultaneously stored
+	 * 
+	 * @return the examplesToStore
+	 */
+	public int getExamplesToStore() {
+		return examplesToStore;
+	}
+
+	/**
+	 * Sets the maximum number of examples whose pairwise kernel computations
+	 * can be simultaneously stored
+	 * 
+	 * @param examplesToStore the examplesToStore to set
+	 * <p>
+	 * NOTE: all the already stored kernel computations will be lost
+	 */
+	public void setExamplesToStore(int examplesToStore) {
 		this.examplesToStore = examplesToStore;
 		this.cacheSize = examplesToStore*(examplesToStore+1)/2;
 		this.cachedExample = new long[examplesToStore];
 		this.kernelValue = new float [this.cacheSize];
 		Arrays.fill(this.cachedExample, INVALID_EXAMPLE_VALUE);
 		Arrays.fill(this.kernelValue, INVALID_KERNEL_VALUE);
-				
 	}
 	
 	@Override

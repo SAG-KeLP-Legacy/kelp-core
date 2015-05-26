@@ -15,16 +15,17 @@
 
 package it.uniroma2.sag.kelp.data.example;
 
-import java.util.AbstractMap;
-import java.util.Map.Entry;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import it.uniroma2.sag.kelp.data.label.Label;
 import it.uniroma2.sag.kelp.data.label.LabelFactory;
 import it.uniroma2.sag.kelp.data.representation.Representation;
 import it.uniroma2.sag.kelp.data.representation.RepresentationFactory;
+
+import java.util.AbstractMap;
+import java.util.HashMap;
+import java.util.Map.Entry;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -101,7 +102,7 @@ public class ExampleFactory {
 				+ identifierPart
 				+ ExampleFactory.DELIMITER
 				+ " "
-				+ representation.toString()
+				+ representation.getTextFromData()
 				+ ExampleFactory.END_REPRESENTATION
 				+ representationType
 				+ ExampleFactory.DELIMITER;
@@ -133,9 +134,9 @@ public class ExampleFactory {
 		return example;
 	}
 
-	private static SimpleExample parseSimpleExample(String representationsPart) throws InstantiationException {
-		SimpleExample example = new SimpleExample();
-		String representationRemaining = representationsPart;
+	private static HashMap<String, Representation> parseRepresentations(String representationsPart) throws InstantiationException {
+		HashMap<String, Representation> representations = new HashMap<String, Representation>();
+		String representationRemaining = representationsPart.trim();
 		int representationCount=0;
 		while(representationRemaining.length()>0){
 			int endRepresentationStartIndex = representationRemaining.indexOf(END_REPRESENTATION);
@@ -148,9 +149,16 @@ public class ExampleFactory {
 			if(representationName==null){
 				representationName = Integer.toString(representationCount);
 			}
-			example.addRepresentation(representationName, entry.getValue());
+			representations.put(representationName, entry.getValue());
 			representationCount++;
 		}
+		return representations;
+	}
+	
+	private static SimpleExample parseSimpleExample(String representationsPart) throws InstantiationException {
+		SimpleExample example = new SimpleExample();
+		HashMap<String, Representation> representations = parseRepresentations( representationsPart);
+		example.setRepresentations(representations);
 		
 		return example;
 	}
@@ -164,7 +172,10 @@ public class ExampleFactory {
 	private static ExamplePair parseExamplePair(String examplePairDescription) throws InstantiationException {
 		int begin = examplePairDescription.indexOf(BEGIN_PAIR) + BEGIN_PAIR.length();
 		int end = examplePairDescription.lastIndexOf(END_PAIR);
+		
 		String pairWithoutBrackets = examplePairDescription.substring(begin, end).trim();
+		
+		
 		
 		int pairSeparatorIndex = 0;
 		int beginPairIndex = 0;
@@ -191,7 +202,13 @@ public class ExampleFactory {
 		String rightExampleDescr = pairWithoutBrackets.substring(pairSeparatorIndex).trim();
 		Example leftExample = parseExample(leftExampleDescr);
 		Example rightExample = parseExample(rightExampleDescr);
-		return new ExamplePair(leftExample, rightExample);
+		ExamplePair pair = new  ExamplePair(leftExample, rightExample);
+		if(examplePairDescription.length() > end + END_PAIR.length() ){
+			String pairDirectRepresentations = examplePairDescription.substring(end+1);
+			HashMap<String, Representation> representations = parseRepresentations( pairDirectRepresentations);
+			pair.setRepresentations(representations);
+		}
 		
+		return pair;
 	}
 }

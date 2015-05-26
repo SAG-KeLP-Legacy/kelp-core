@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import it.uniroma2.sag.kelp.data.example.Example;
-import it.uniroma2.sag.kelp.data.example.SimpleExample;
 import it.uniroma2.sag.kelp.data.representation.Vector;
 import it.uniroma2.sag.kelp.predictionfunction.model.BinaryLinearModel;
 import it.uniroma2.sag.kelp.predictionfunction.model.Model;
@@ -52,7 +51,7 @@ public class BinaryLinearClassifier extends BinaryClassifier{
 
 	@Override
 	public BinaryMarginClassifierOutput predict(Example example) {		
-		Vector vector = (Vector)((SimpleExample)example).getRepresentation(model.getRepresentation());
+		Vector vector = (Vector)example.getRepresentation(model.getRepresentation());
 		
 		float prediction = model.getBias();	
 		if(vector==null){

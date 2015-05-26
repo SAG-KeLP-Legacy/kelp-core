@@ -16,7 +16,6 @@
 package it.uniroma2.sag.kelp.predictionfunction.model;
 
 import it.uniroma2.sag.kelp.data.example.Example;
-import it.uniroma2.sag.kelp.data.example.SimpleExample;
 import it.uniroma2.sag.kelp.data.representation.Representation;
 import it.uniroma2.sag.kelp.data.representation.Vector;
 
@@ -30,11 +29,11 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("binarylinearmodel")
 public class BinaryLinearModel extends BinaryModel{
 
-	
+
 	private Vector hyperplane;
-	
+
 	private String representation;
-	
+
 	/**
 	 * @return the hyperplane
 	 */
@@ -74,32 +73,32 @@ public class BinaryLinearModel extends BinaryModel{
 
 	@Override
 	public void addExample(float weight, Example example) {
-		if (example instanceof SimpleExample){
-			Representation rep = ((SimpleExample)example).getRepresentation(representation);
-			if(rep instanceof Vector){
-				Vector vector = (Vector) rep;
-				if(this.hyperplane==null){
-					this.hyperplane = vector.getZeroVector();
-				}				
-				this.hyperplane.add(weight, vector);				
-				
-			}else{
-				throw new IllegalArgumentException("The given example does not have a Vector representation identified with " + representation);
-			}
+
+		Representation rep = example.getRepresentation(representation);
+		if(rep instanceof Vector){
+			Vector vector = (Vector) rep;
+			if(this.hyperplane==null){
+				this.hyperplane = vector.getZeroVector();
+			}				
+			this.hyperplane.add(weight, vector);				
 
 		}else{
-			throw new IllegalArgumentException("Expected an instance of SimpleExample");
+			throw new IllegalArgumentException("The given example does not have a Vector representation identified with " + representation);
 		}
-		
-				
-		
+
+
 	}
 
 	@Override
 	public float getSquaredNorm(Example example) {
-		Vector vector = (Vector) ((SimpleExample)example).getRepresentation(representation);
-		
+		Vector vector = (Vector) example.getRepresentation(representation);
+
 		return vector.getSquaredNorm();
 	}
 	
+	@Override
+	public float getSquaredNorm(){
+		return this.hyperplane.getSquaredNorm();
+	}
+
 }
