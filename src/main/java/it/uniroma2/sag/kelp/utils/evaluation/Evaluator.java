@@ -44,7 +44,8 @@ public abstract class Evaluator {
 			}
 		}
 		try {
-			Method method = this.getClass().getMethod(performanceMeasureMethodName, methodParameters);
+			String methodName = "get" + performanceMeasureMethodName.substring(0,1).toUpperCase() + performanceMeasureMethodName.substring(1);
+			Method method = this.getClass().getMethod(methodName, methodParameters);
 			Object invokedResult = method.invoke(this, args);
 			Float res = (Float)invokedResult;
 			return res.floatValue();
