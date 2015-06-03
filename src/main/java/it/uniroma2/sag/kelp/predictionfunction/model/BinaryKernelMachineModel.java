@@ -183,6 +183,7 @@ public class BinaryKernelMachineModel extends BinaryModel implements KernelMachi
 	}
 
 	@Override
+	@JsonIgnore
 	public float getSquaredNorm() {
 		float sum=0;
 		for(SupportVector sv1 : this.supportVectors){
