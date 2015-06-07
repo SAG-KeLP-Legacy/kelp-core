@@ -167,7 +167,7 @@ public abstract class Kernel {
 
 
 				float squaredNorm=this.innerProduct(example, example);
-				this.normCache.setSquaredNormVaue(example, squaredNorm);
+				this.normCache.setSquaredNormValue(example, squaredNorm);
 				return squaredNorm;
 			}
 			this.numberOfHits++;

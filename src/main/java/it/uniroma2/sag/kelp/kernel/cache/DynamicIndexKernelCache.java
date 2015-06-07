@@ -266,7 +266,7 @@ public class DynamicIndexKernelCache extends KernelCache implements Serializable
 		
 	}
 	
-	public static LinkedList<Integer> findIndicesSmallerNValues(long [] values, int n){
+	private static LinkedList<Integer> findIndicesSmallerNValues(long [] values, int n){
 		LinkedList<Integer> indices = new LinkedList<Integer>();
 		for(int i=0; i<n; i++){
 			insertIntoOrderedList(indices, values, i, values[i]);
