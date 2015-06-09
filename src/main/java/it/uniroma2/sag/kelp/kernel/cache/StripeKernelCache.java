@@ -198,7 +198,7 @@ public class StripeKernelCache extends KernelCache implements Serializable {
 		return buffer[rowId][colId];
 	}
 
-	private long lastAddedIndexRow;
+	private long lastAddedIndexRow=-1;
 
 	@Override
 	public void setKernelValue(Example exA, Example exB, float value) {
@@ -303,7 +303,8 @@ public class StripeKernelCache extends KernelCache implements Serializable {
 			for (int columnId = 0; columnId < buffer[rowId].length; columnId++)
 				buffer[rowId][columnId] = INVALID_KERNEL_VALUE;
 		}
-
+		
+		this.lastAddedIndexRow=-1;
 	}
 
 	@Override
