@@ -46,6 +46,11 @@ public interface SquaredNormCache {
 	 * @param example the example whose quadratic norm must be stored
 	 * @param squaredNorm the squared norm to be stored
 	 */
-	public void setSquaredNormVaue(Example example, float squaredNorm);
+	public void setSquaredNormValue(Example example, float squaredNorm);
+	
+	/**
+	 * Empties the cache
+	 */
+	public void flush();
 	
 }

@@ -91,10 +91,15 @@ public class FixIndexSquaredNormCache implements SquaredNormCache{
 	}
 	
 	@Override
-	public void setSquaredNormVaue(Example example, float squaredNorm){
+	public void setSquaredNormValue(Example example, float squaredNorm){
 		int exampleIndex = this.getExampleIndex(example);
 		this.storedExample[exampleIndex] = example.getId();
 		this.normValues[exampleIndex] = squaredNorm;
+	}
+
+	@Override
+	public void flush() {
+		Arrays.fill(storedExample, INVALID_EXAMPLE_VALUE);
 	}
 
 }
