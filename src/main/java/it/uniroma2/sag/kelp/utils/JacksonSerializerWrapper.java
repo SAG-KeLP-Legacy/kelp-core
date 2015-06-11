@@ -23,7 +23,9 @@ import java.io.PrintStream;
 import java.util.zip.GZIPOutputStream;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
@@ -35,12 +37,20 @@ import com.fasterxml.jackson.databind.ObjectWriter;
  *
  */
 public class JacksonSerializerWrapper implements ObjectSerializer {
+	
+	private static ObjectMapper mapper;
 	private static final ObjectWriter ow;
 	static {
-		ObjectMapper mapper = new ObjectMapper();
+		mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(Include.NON_NULL);
 		mapper.setSerializationInclusion(Include.NON_EMPTY);
 		ow = mapper.writer().withDefaultPrettyPrinter();
+	}
+
+	@Override
+	public <T> T readValue(String content, Class<T> valueType)
+			throws IOException, JsonParseException, JsonMappingException{
+		return mapper.readValue(content, valueType);
 	}
 
 	@Override
@@ -58,14 +68,14 @@ public class JacksonSerializerWrapper implements ObjectSerializer {
 		ps.flush();
 		ps.close();
 	}
-	
+
 	@Override
 	public void writeValueOnGzipFile(Object object, String filePath)
 			throws IOException {		
 		FileOutputStream out = new FileOutputStream(new File(filePath));
 		GZIPOutputStream gzip = new GZIPOutputStream(out);
 		OutputStreamWriter writer = new OutputStreamWriter(gzip);
-//		writer.write(toWrite.toCharArray());
+		//		writer.write(toWrite.toCharArray());
 		ow.writeValue(gzip, object);
 		writer.flush();
 		gzip.finish();

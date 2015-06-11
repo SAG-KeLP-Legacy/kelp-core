@@ -17,9 +17,13 @@ package it.uniroma2.sag.kelp.utils;
 
 import java.io.IOException;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+
 /**
  * It is a serializer, i.e. an object that is able to convert objects into a String representation, preserving all their
- * properties 
+ * properties. The serializer is then able to deserialize those textual representations to instantiate again the original
+ * serialized object
  * 
  * @author Simone Filice, Danilo Croce
  *
@@ -54,4 +58,18 @@ public interface ObjectSerializer {
 	 * @throws IOException
 	 */
 	public void writeValueOnGzipFile(Object object, String filePath) throws IOException;
+	
+	/**
+	 * Deserializes an object that has been previously converted into a textual format 
+	 * 
+	 * @param content the object in its textual format
+	 * @param valueType the class of the object to be deserialized
+	 * @return the deserialized object
+	 * @throws IOException
+	 * @throws JsonParseException
+	 * @throws JsonMappingException
+	 */
+	public <T> T readValue(String content, Class<T> valueType)
+			throws IOException, JsonParseException, JsonMappingException;
+	
 }
