@@ -42,7 +42,12 @@ public class ExamplePair extends SimpleExample{
 	private Example rightExample;
 	
 	
+	public ExamplePair(){
+		super();
+	}
+	
 	public ExamplePair(Example left, Example right){
+		this();
 		this.leftExample = left;
 		this.rightExample = right;
 	}
@@ -86,8 +91,8 @@ public class ExamplePair extends SimpleExample{
 	}
 	
 	/**
-	 * Manipulate this example accordingly to the provided <code>manipulator</code>. The manipulation strategy is applied
-	 * both to the representations stored directly in this ExamplePair than to the ones stored in the left and right
+	 * Manipulates this example according to the provided <code>manipulator</code>. The manipulation strategy is applied
+	 * both to the representations stored directly in this ExamplePair and the ones stored in the left and right
 	 * examples
 	 * 
 	 * @param manipulator the manipulator
