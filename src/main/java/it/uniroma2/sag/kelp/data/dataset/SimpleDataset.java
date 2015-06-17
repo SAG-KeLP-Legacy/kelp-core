@@ -352,7 +352,7 @@ public class SimpleDataset implements Dataset {
 	}
 
 	/**
-	 * Populate the dataset by reading it from a platform
+	 * Populate the dataset by reading it from a KeLP
 	 * compliant file.
 	 * 
 	 * @param filename the path of the file to be read
@@ -360,6 +360,16 @@ public class SimpleDataset implements Dataset {
 	 */
 	public void populate(String filename) throws Exception {
 		DatasetReader reader = new DatasetReader(filename);
+		this.populate(reader);
+	}
+	
+	/**
+	 * Populate the dataset using the provided <code>reader</code>
+	 * 
+	 * @param datasetReader the reader
+	 * @throws Exception
+	 */
+	public void populate(DatasetReader reader) throws Exception {
 		while (reader.hasNext()) {
 			Example example = reader.readNextExample();
 			this.addExample(example);

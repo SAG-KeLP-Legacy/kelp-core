@@ -31,8 +31,8 @@ import java.util.zip.GZIPInputStream;
  * @author Simone Filice
  */
 public class DatasetReader {
-	private BufferedReader inputBuffer;
-	private String nextRow;
+	protected BufferedReader inputBuffer;
+	protected String nextRow;
 	private boolean hasNextRow;
 	private String filename;
 
@@ -44,7 +44,7 @@ public class DatasetReader {
 		this.filename = filename;
 	}
 
-	private BufferedReader openBufferedReader(String filename) throws IOException,
+	protected BufferedReader openBufferedReader(String filename) throws IOException,
 			FileNotFoundException, UnsupportedEncodingException {
 		InputStreamReader reader = null;
 		GZIPInputStream gzis = null;
@@ -72,7 +72,7 @@ public class DatasetReader {
 		this.checkRowValidity();
 	}
 
-	private void checkRowValidity() {
+	protected void checkRowValidity() {
 		if (this.nextRow == null || this.nextRow.trim().length() == 0) {
 			this.hasNextRow = false;
 		}
