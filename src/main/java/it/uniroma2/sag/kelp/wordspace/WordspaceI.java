@@ -38,7 +38,7 @@ public interface WordspaceI {
 	 * @param word the word
 	 * @param vector the vector associated to <code>word</code>
 	 */
-	public void addWordVector(String word, Vector vector);
+	public void addWordVector(String word, Vector<?> vector);
 	
 	/**
 	 * Returns the vector associated to the given word
@@ -47,7 +47,7 @@ public interface WordspaceI {
 	 * @return the vector associated to <code>word</code>, null if <code>word</code>
 	 * is not in the vocabulary of this wordspace
 	 */
-	public Vector getVector(String word);
+	public Vector<?> getVector(String word);
 	
 	/**
 	 * Returns the complete set of words in the vocabulary (words having an associated vector in this wordspace)

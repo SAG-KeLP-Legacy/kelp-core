@@ -51,7 +51,7 @@ public class BinaryLinearClassifier extends BinaryClassifier{
 
 	@Override
 	public BinaryMarginClassifierOutput predict(Example example) {		
-		Vector vector = (Vector)example.getRepresentation(model.getRepresentation());
+		Vector<?> vector = (Vector<?>)example.getRepresentation(model.getRepresentation());
 		
 		float prediction = model.getBias();	
 		if(vector==null){

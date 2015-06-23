@@ -20,12 +20,12 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * It is a Vectorial representation
+ * It is a Vectorial representation whose dimensions are identified by objects of type T
  * 
  * @author Simone Filice
  *
  */
-public interface Vector extends Normalizable {
+public interface Vector<T> extends Normalizable {
 
 	/**
 	 * Returns the dot product between this vector and <code>vector</code>
@@ -33,7 +33,7 @@ public interface Vector extends Normalizable {
 	 * @param vector
 	 * @return the dot product
 	 */
-	public float innerProduct(Vector vector);
+	public float innerProduct(Vector<?> vector);
 
 	/**
 	 * Compute the point-wise product of this vector with the one in
@@ -41,7 +41,7 @@ public interface Vector extends Normalizable {
 	 * 
 	 * @param vector the vector used for the point-wise product
 	 */
-	public void pointWiseProduct(Vector vector);
+	public void pointWiseProduct(Vector<?> vector);
 
 	/**
 	 * Add a <code>vector</code> to this vector
@@ -49,7 +49,7 @@ public interface Vector extends Normalizable {
 	 * @param vector
 	 *            the vector to be added
 	 */
-	public void add(Vector vector);
+	public void add(Vector<?> vector);
 
 	/**
 	 * Add a <code>vector</code> multiplied by <code>coeff</code> to this vector
@@ -59,7 +59,7 @@ public interface Vector extends Normalizable {
 	 * @param vector
 	 *            the vector to be added
 	 */
-	public void add(float coeff, Vector vector);
+	public void add(float coeff, Vector<?> vector);
 
 	/**
 	 * Add a <code>vector</code> multiplied by <code>vectorCoeff</code> to this
@@ -72,7 +72,7 @@ public interface Vector extends Normalizable {
 	 * @param vector
 	 *            the vector to be added
 	 */
-	public void add(float coeff, float vectorCoeff, Vector vector);
+	public void add(float coeff, float vectorCoeff, Vector<?> vector);
 
 	/**
 	 * Returns a vector whose values are all 0. The returned vector has the same
@@ -80,14 +80,14 @@ public interface Vector extends Normalizable {
 	 * 
 	 * @return a zero vector
 	 */
-	public Vector getZeroVector();
+	public Vector<T> getZeroVector();
 	
 	/**
 	 * Returns a copy of this vector. 
 	 * 
 	 * @return Vector
 	 */
-	public Vector copyVector();
+	public Vector<T> copyVector();
 
 	/**
 	 * Returns a map containing all the non-zero features
@@ -95,6 +95,21 @@ public interface Vector extends Normalizable {
 	 * @return the non zero features
 	 */
 	@JsonIgnore
-	public Map<String, Number> getActiveFeatures();
+	public Map<T, Number> getActiveFeatures();
+	
+	/**
+	 * Assigns <code>value</value> to the feature identified by <code>featureIdentifier</code> 
+	 * 
+	 * @param featureIdentifier the identifier of the feature
+	 * @param value the value of the feature
+	 */
+	public void setFeatureValue(T featureIdentifier, float value);
+	
+	/**
+	 * Returns the value of the feature identified with <code>featureIdentifier</code>
+	 * 
+	 * @return the value of the feature
+	 */
+	public float getFeatureValue(T featureIdentifier);
 
 }

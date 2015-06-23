@@ -159,8 +159,8 @@ public class SimpleExample extends Example {
 	}
 
 	@Override
-	public Vector getZeroVector(String representationIdentifier) {
-		Vector rep = (Vector) getRepresentation(representationIdentifier);
+	public Vector<?> getZeroVector(String representationIdentifier) {
+		Vector<?> rep = (Vector<?>) getRepresentation(representationIdentifier);
 		return rep.getZeroVector();
 	}
 	
