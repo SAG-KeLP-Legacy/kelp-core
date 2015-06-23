@@ -30,14 +30,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
 /**
- * It is a serializer, i.e. an object that is able to convert objects into a String representation, preserving all their
- * properties. It embeds the Jackson Serializer.
+ * It is a serializer, i.e. an object that is able to convert objects into a
+ * String representation, preserving all their properties. It embeds the Jackson
+ * Serializer.
  * 
  * @author Simone Filice, Danilo Croce
  *
  */
 public class JacksonSerializerWrapper implements ObjectSerializer {
-	
 	private static ObjectMapper mapper;
 	private static final ObjectWriter ow;
 	static {
@@ -49,8 +49,13 @@ public class JacksonSerializerWrapper implements ObjectSerializer {
 
 	@Override
 	public <T> T readValue(String content, Class<T> valueType)
-			throws IOException, JsonParseException, JsonMappingException{
+			throws IOException, JsonParseException, JsonMappingException {
 		return mapper.readValue(content, valueType);
+	}
+
+	public <T> T readValue(File file, Class<T> valueType)
+			throws JsonParseException, JsonMappingException, IOException {
+		return mapper.readValue(file, valueType);
 	}
 
 	@Override
@@ -71,11 +76,11 @@ public class JacksonSerializerWrapper implements ObjectSerializer {
 
 	@Override
 	public void writeValueOnGzipFile(Object object, String filePath)
-			throws IOException {		
+			throws IOException {
 		FileOutputStream out = new FileOutputStream(new File(filePath));
 		GZIPOutputStream gzip = new GZIPOutputStream(out);
 		OutputStreamWriter writer = new OutputStreamWriter(gzip);
-		//		writer.write(toWrite.toCharArray());
+		// writer.write(toWrite.toCharArray());
 		ow.writeValue(gzip, object);
 		writer.flush();
 		gzip.finish();
