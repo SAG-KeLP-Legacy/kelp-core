@@ -15,6 +15,7 @@
 
 package it.uniroma2.sag.kelp.utils;
 
+import java.io.File;
 import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -70,6 +71,19 @@ public interface ObjectSerializer {
 	 * @throws JsonMappingException
 	 */
 	public <T> T readValue(String content, Class<T> valueType)
+			throws IOException, JsonParseException, JsonMappingException;
+	
+	/**
+	 * Deserializes an object that has been previously converted into a textual format 
+	 * 
+	 * @param file the file from which the serialized format must be read
+	 * @param valueType the class of the object to be deserialized
+	 * @return the deserialized object
+	 * @throws IOException
+	 * @throws JsonParseException
+	 * @throws JsonMappingException
+	 */
+	public <T> T readValue(File file, Class<T> valueType)
 			throws IOException, JsonParseException, JsonMappingException;
 	
 }
