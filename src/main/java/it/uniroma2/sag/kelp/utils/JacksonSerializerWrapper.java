@@ -59,11 +59,6 @@ public class JacksonSerializerWrapper implements ObjectSerializer {
 		return mapper.readValue(file, valueType);
 	}
 
-	public <T> T readValue(File file, Class<T> valueType)
-			throws JsonParseException, JsonMappingException, IOException {
-		return mapper.readValue(file, valueType);
-	}
-
 	@Override
 	public String writeValueAsString(Object object)
 			throws JsonProcessingException {
