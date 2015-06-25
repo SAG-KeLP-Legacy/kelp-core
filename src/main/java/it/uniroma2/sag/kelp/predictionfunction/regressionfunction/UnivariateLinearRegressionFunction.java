@@ -36,7 +36,7 @@ public class UnivariateLinearRegressionFunction extends UnivariateRegressionFunc
 	
 	@Override
 	public UnivariateRegressionOutput predict(Example example) {
-		Vector<?> vector = (Vector<?>)example.getRepresentation(model.getRepresentation());
+		Vector vector = (Vector)example.getRepresentation(model.getRepresentation());
 
 		float prediction = model.getBias();	
 		if(model.getHyperplane()==null){

@@ -31,21 +31,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class BinaryLinearModel extends BinaryModel{
 
 
-	private Vector<?> hyperplane;
+	private Vector hyperplane;
 
 	private String representation;
 
 	/**
 	 * @return the hyperplane
 	 */
-	public Vector<?> getHyperplane() {
+	public Vector getHyperplane() {
 		return hyperplane;
 	}
 
 	/**
 	 * @param hyperplane the hyperplane to set
 	 */
-	public void setHyperplane(Vector<?> hyperplane) {
+	public void setHyperplane(Vector hyperplane) {
 		this.hyperplane = hyperplane;
 	}
 
@@ -77,7 +77,7 @@ public class BinaryLinearModel extends BinaryModel{
 
 		Representation rep = example.getRepresentation(representation);
 		if(rep instanceof Vector){
-			Vector<?> vector = (Vector<?>) rep;
+			Vector vector = (Vector) rep;
 			if(this.hyperplane==null){
 				this.hyperplane = vector.getZeroVector();
 			}				
@@ -92,7 +92,7 @@ public class BinaryLinearModel extends BinaryModel{
 
 	@Override
 	public float getSquaredNorm(Example example) {
-		Vector<?> vector = (Vector<?>) example.getRepresentation(representation);
+		Vector vector = (Vector) example.getRepresentation(representation);
 
 		return vector.getSquaredNorm();
 	}

@@ -307,7 +307,7 @@ public abstract class Example implements Serializable {
 	 */
 	public abstract Representation getRepresentation(String representationName);
 	
-	public abstract Vector<?> getZeroVector(String representationIdentifier);
+	public abstract Vector getZeroVector(String representationIdentifier);
 	
 	/**
 	 * Manipulate this example accordingly to the provided <code>manipulator</code>

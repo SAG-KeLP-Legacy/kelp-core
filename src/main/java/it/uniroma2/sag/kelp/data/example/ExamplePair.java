@@ -71,7 +71,7 @@ public class ExamplePair extends SimpleExample{
 	}
 
 	@Override
-	public Vector<?> getZeroVector(String representationIdentifier) {
+	public Vector getZeroVector(String representationIdentifier) {
 		return this.leftExample.getZeroVector(representationIdentifier);
 	}
 	

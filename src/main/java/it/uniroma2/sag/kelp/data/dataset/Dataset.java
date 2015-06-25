@@ -113,7 +113,7 @@ public interface Dataset {
 	 * @param representationIdentifier the identifier of the representation
 	 * @return a zero vector compliant with the representation identifier by <code>representationIdentifier</code> containings all zero
 	 */
-	public Vector<?> getZeroVector(String representationIdentifier);
+	public Vector getZeroVector(String representationIdentifier);
 	
 	/**
 	 * @return a random example

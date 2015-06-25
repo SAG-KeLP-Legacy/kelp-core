@@ -418,7 +418,7 @@ public class SimpleDataset implements Dataset {
 	}
 
 	@Override
-	public Vector<?> getZeroVector(String representationIdentifier) {
+	public Vector getZeroVector(String representationIdentifier) {
 		Example example = this.examples.get(0);
 		return example.getZeroVector(representationIdentifier);
 	}
