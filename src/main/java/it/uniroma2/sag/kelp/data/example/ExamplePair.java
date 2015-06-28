@@ -15,14 +15,12 @@
 
 package it.uniroma2.sag.kelp.data.example;
 
+import it.uniroma2.sag.kelp.data.manipulator.Manipulator;
+import it.uniroma2.sag.kelp.data.representation.Representation;
+
 import java.util.Map.Entry;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-
-import it.uniroma2.sag.kelp.data.example.Example;
-import it.uniroma2.sag.kelp.data.manipulator.Manipulator;
-import it.uniroma2.sag.kelp.data.representation.Representation;
-import it.uniroma2.sag.kelp.data.representation.Vector;
 
 
 /**
@@ -70,10 +68,10 @@ public class ExamplePair extends SimpleExample{
 		return this.rightExample;
 	}
 
-	@Override
-	public Vector getZeroVector(String representationIdentifier) {
-		return this.leftExample.getZeroVector(representationIdentifier);
-	}
+//	@Override
+//	public Vector getZeroVector(String representationIdentifier) {
+//		return this.leftExample.getZeroVector(representationIdentifier);
+//	}
 	
 	@Override
 	public String toString(){

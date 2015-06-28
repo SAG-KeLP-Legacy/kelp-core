@@ -18,7 +18,6 @@ package it.uniroma2.sag.kelp.data.example;
 import it.uniroma2.sag.kelp.data.label.Label;
 import it.uniroma2.sag.kelp.data.manipulator.Manipulator;
 import it.uniroma2.sag.kelp.data.representation.Representation;
-import it.uniroma2.sag.kelp.data.representation.Vector;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -158,11 +157,11 @@ public class SimpleExample extends Example {
 		}
 	}
 
-	@Override
-	public Vector getZeroVector(String representationIdentifier) {
-		Vector rep = (Vector) getRepresentation(representationIdentifier);
-		return rep.getZeroVector();
-	}
+//	@Override
+//	public Vector getZeroVector(String representationIdentifier) {
+//		Vector rep = (Vector) getRepresentation(representationIdentifier);
+//		return rep.getZeroVector();
+//	}
 	
 	@Override
 	public void manipulate(Manipulator manipulator){
