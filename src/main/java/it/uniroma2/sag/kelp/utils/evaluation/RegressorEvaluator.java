@@ -66,7 +66,7 @@ public class RegressorEvaluator extends Evaluator {
 	 * @param label
 	 * @return a float or -1 if label is not a valid label for this Evaluator
 	 */
-	public float getSquareMeanError(Label label) {
+	public float getMeanSquaredError(Label label) {
 		if (errors.containsKey(label)) {
 			return errors.get(label);
 		}
@@ -78,7 +78,7 @@ public class RegressorEvaluator extends Evaluator {
 	 * 
 	 * @return a float
 	 */
-	public float getSquareMeanErrors() {
+	public float getMeanSquaredErrors() {
 		float allSum=0.0f;
 		for (Label numericLabel : errors.keySet()) {
 			allSum+=errors.get(numericLabel);
