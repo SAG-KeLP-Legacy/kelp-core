@@ -15,6 +15,7 @@
 
 package it.uniroma2.sag.kelp.utils.evaluation;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -91,5 +92,10 @@ public class RegressorEvaluator extends Evaluator {
 		values.clear();
 		errors.clear();		
 		n=0;
+	}
+
+	@Override
+	public RegressorEvaluator duplicate() {
+		return new RegressorEvaluator(new ArrayList<Label>(values.keySet()));
 	}
 }

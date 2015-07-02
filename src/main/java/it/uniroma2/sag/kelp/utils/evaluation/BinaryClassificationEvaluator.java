@@ -137,4 +137,9 @@ public class BinaryClassificationEvaluator extends Evaluator {
 		System.out.println("\tPredicted: " + predictedPositive);
 		System.out.println("\tToBePredicted: " + total);
 	}
+
+	@Override
+	public BinaryClassificationEvaluator duplicate() {
+		return new BinaryClassificationEvaluator(positiveLabel);
+	}
 }

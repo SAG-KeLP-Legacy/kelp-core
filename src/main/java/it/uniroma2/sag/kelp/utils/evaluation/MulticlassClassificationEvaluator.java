@@ -283,4 +283,9 @@ public class MulticlassClassificationEvaluator extends Evaluator {
 		}
 		return b.toString().trim();
 	}
+
+	@Override
+	public MulticlassClassificationEvaluator duplicate() {
+		return new MulticlassClassificationEvaluator(labels);
+	}
 }

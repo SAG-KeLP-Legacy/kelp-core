@@ -79,4 +79,11 @@ public abstract class Evaluator {
 	 * This method should reset the state of the evaluator
 	 */
 	public abstract void clear();
+	
+	/**
+	 * Returns a new instance of this Evaluator
+	 * 
+	 * @return a new instance of this Evaluator
+	 */
+	public abstract Evaluator duplicate();
 }
