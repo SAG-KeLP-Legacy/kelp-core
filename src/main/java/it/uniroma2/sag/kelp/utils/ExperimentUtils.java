@@ -15,6 +15,12 @@
 
 package it.uniroma2.sag.kelp.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import it.uniroma2.sag.kelp.data.dataset.Dataset;
 import it.uniroma2.sag.kelp.data.dataset.SimpleDataset;
 import it.uniroma2.sag.kelp.data.example.Example;
@@ -23,9 +29,6 @@ import it.uniroma2.sag.kelp.predictionfunction.Prediction;
 import it.uniroma2.sag.kelp.predictionfunction.PredictionFunction;
 import it.uniroma2.sag.kelp.utils.evaluation.Evaluator;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Class containing some useful methods for evaluating the performance of a learning algorithm 
  * 
@@ -33,6 +36,7 @@ import java.util.List;
  *
  */
 public class ExperimentUtils {
+	private static Logger logger = LoggerFactory.getLogger(ExperimentUtils.class);
 	
 	/**
 	 * Evaluates a prediction function over a testset
@@ -76,7 +80,7 @@ public class ExperimentUtils {
 			SimpleDataset testSet = (SimpleDataset) folds[i];
 			SimpleDataset trainingSet = getAllExcept(folds, i);
 			
-			System.out.println("start testing on fold=" + i);//TODO: put a logger
+			logger.info("start testing on fold=" + i);
 			algorithm.learn(trainingSet);
 			PredictionFunction predictionFunction = algorithm.getPredictionFunction();
 			test(predictionFunction, evaluators.get(i), testSet);
@@ -85,6 +89,7 @@ public class ExperimentUtils {
 		
 		return evaluators;
 	}
+	
 	
 	private static SimpleDataset getAllExcept(Dataset[] folds, int i) {
 		SimpleDataset ret = new SimpleDataset();
