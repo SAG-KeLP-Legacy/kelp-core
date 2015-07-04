@@ -16,7 +16,7 @@
 package it.uniroma2.sag.kelp.utils;
 
 /**
- * Implements static utility methods for mathematical operations
+ * Implements static utility methods for mathematical operations and statistics
  * 
  * @author Simone Filice
  *
@@ -28,7 +28,7 @@ public class Math {
 	 * 
 	 * @param base the base
 	 * @param exponent the exponent
-	 * @return 
+	 * @return \(base^{exponent}\)
 	 */
 	public static float pow(float base, int exponent){
 		if(java.lang.Math.abs(exponent)>40){
@@ -48,5 +48,62 @@ public class Math {
 			}
 			return value;
 		}
+	}
+	
+	/**
+	 * Computes the arithmetic mean \(\bar{x}\) of the input values \(x_1, \ldots x_n\)
+	 * <p>
+	 * \(\bar{x} = \frac{1}{n}  \sum_{i=1}^{n}x_i\)
+	 * 
+	 * @param values the input values on which computing the arithmetic mean
+	 * @return the mean
+	 */
+	public static float getMean(float [] values){
+		if(values.length==0){
+			return 0;
+		}
+		float sum = 0;
+		for(float value : values){
+			sum+=value;
+		}
+		return sum/=values.length;
+	}
+	
+	/**
+	 * Estimates the unbiased sample variance \(\sigma^2\) of population using some samples 
+	 * \(x_1, \ldots x_n\) whose estimated mean is \(\bar{x}\)
+	 * <p>
+	 * \(\sigma^2 = \frac{1}{n-1}  \sum_{i=1}^{n}(x_i -\bar{x_i})^2\)
+	 * 
+	 * 
+	 * @param values the samples of the population whose variance must be estimated
+	 * @return the unbiased sample variance
+	 */
+	public static float getVariance(float [] values){
+		if(values.length<2){
+			return 0;
+		}
+		float sum = 0;
+		float mean = getMean(values);
+		for(float value : values){
+			float difference = value - mean;
+			sum+= difference*difference;
+		}
+		
+		return sum/(values.length-1);
+	}
+	
+	/**
+	 * Estimates the unbiased standard deviation \(\sigma\) of population using some samples 
+	 * \(x_1, \ldots x_n\) whose estimated mean is \(\bar{x}\)
+	 * <p>
+	 * \(\sigma = \sqrt{\frac{1}{n-1}  \sum_{i=1}^{n}(x_i -\bar{x_i})^2}\)
+	 * 
+	 * 
+	 * @param values the samples of the population whose standard deviation must be estimated
+	 * @return the unbiased sample standard deviation
+	 */
+	public static double getStandardDeviation(float [] values){
+		return java.lang.Math.sqrt(getVariance(values));
 	}
 }
