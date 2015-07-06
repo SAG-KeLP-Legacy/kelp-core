@@ -24,6 +24,8 @@ import java.lang.reflect.Method;
 
 public abstract class Evaluator {
 	
+	protected boolean computed=false;
+	
 	/**
 	 * This method allow to retrieve a performance measure by specifying the name of the method to be used.
 	 *  
@@ -73,7 +75,7 @@ public abstract class Evaluator {
 	/**
 	 * This method is intented to force the computation of the performance measure.
 	 */
-	public abstract void compute();
+	protected abstract void compute();
 	
 	/**
 	 * This method should reset the state of the evaluator

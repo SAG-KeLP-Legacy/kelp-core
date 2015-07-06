@@ -54,7 +54,6 @@ public class ExperimentUtils {
 			evaluator.addCount(ex, prediction);
 			predictions.add(prediction);
 		}
-		evaluator.compute();
 		return predictions;
 	}
 	

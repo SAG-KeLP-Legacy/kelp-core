@@ -33,34 +33,36 @@ import it.uniroma2.sag.kelp.predictionfunction.regressionfunction.UnivariateRegr
 public class RegressorEvaluator extends Evaluator {
 	private HashMap<Label, Float> values = new HashMap<Label, Float>();
 	private HashMap<Label, Float> errors = new HashMap<Label, Float>();
-	int n=0;
-	
+	int n = 0;
+
 	public RegressorEvaluator(List<Label> labels) {
 		for (Label numericLabel : labels) {
 			values.put(numericLabel, 0.0f);
 			errors.put(numericLabel, 0.0f);
 		}
 	}
-	
+
 	public void addCount(Example test, Prediction prediction) {
 		for (Label numericLabel : values.keySet()) {
 			Float gold = test.getRegressionValue(numericLabel);
-			UnivariateRegressionOutput out = (UnivariateRegressionOutput)prediction;
+			UnivariateRegressionOutput out = (UnivariateRegressionOutput) prediction;
 			Float score = out.getScore(numericLabel);
 			float v = (score - gold) * (score - gold);
 			values.put(numericLabel, values.get(numericLabel) + v);
 		}
 		n++;
+		this.computed = false;
 	}
 
 	@Override
-	public void compute() {
+	protected void compute() {
 		for (Label numericLabel : values.keySet()) {
 			float v = values.get(numericLabel);
-			errors.put(numericLabel, v/n);			
+			errors.put(numericLabel, v / n);
 		}
+		this.computed = true;
 	}
-	
+
 	/**
 	 * Returns the mean square error of the Label label.
 	 * 
@@ -68,30 +70,37 @@ public class RegressorEvaluator extends Evaluator {
 	 * @return a float or -1 if label is not a valid label for this Evaluator
 	 */
 	public float getMeanSquaredError(Label label) {
+		if (!this.computed)
+			compute();
 		if (errors.containsKey(label)) {
 			return errors.get(label);
 		}
 		return -1f;
 	}
-	
+
 	/**
 	 * Returns the mean error between the different Label{s}
 	 * 
 	 * @return a float
 	 */
 	public float getMeanSquaredErrors() {
-		float allSum=0.0f;
+		if (!this.computed)
+			compute();
+		
+		float allSum = 0.0f;
 		for (Label numericLabel : errors.keySet()) {
-			allSum+=errors.get(numericLabel);
+			allSum += errors.get(numericLabel);
 		}
-		return allSum/errors.keySet().size();
+		return allSum / errors.keySet().size();
 	}
 
 	@Override
 	public void clear() {
 		values.clear();
-		errors.clear();		
-		n=0;
+		errors.clear();
+		n = 0;
+		
+		this.computed=false;
 	}
 
 	@Override
