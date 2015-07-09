@@ -66,6 +66,7 @@ public class MulticlassClassificationEvaluator extends Evaluator {
 		total = 0;
 		correct = 0;
 		accuracy = 0.0f;
+		this.computed=false;
 	}
 
 	/**
@@ -74,6 +75,8 @@ public class MulticlassClassificationEvaluator extends Evaluator {
 	 * @return
 	 */
 	public TObjectFloatHashMap<Label> getPrecisions() {
+		if (!this.computed)
+			compute();
 		return precisions;
 	}
 
@@ -83,6 +86,8 @@ public class MulticlassClassificationEvaluator extends Evaluator {
 	 * @return
 	 */
 	public TObjectFloatHashMap<Label> getRecalls() {
+		if (!this.computed)
+			compute();
 		return recalls;
 	}
 
@@ -92,6 +97,8 @@ public class MulticlassClassificationEvaluator extends Evaluator {
 	 * @return
 	 */
 	public TObjectFloatHashMap<Label> getF1s() {
+		if (!this.computed)
+			compute();
 		return f1s;
 	}
 
@@ -111,9 +118,10 @@ public class MulticlassClassificationEvaluator extends Evaluator {
 				}
 			}
 		}
+		this.computed=false;
 	}
 
-	public void compute() {
+	protected void compute() {
 		int c = 0;
 		int p = 0;
 		int tobe=0;
@@ -143,6 +151,7 @@ public class MulticlassClassificationEvaluator extends Evaluator {
 				/ (overallPrecision + overallRecall);
 
 		accuracy = (float) correct / (float) total;
+		this.computed=true;
 	}
 
 	/**
@@ -151,6 +160,9 @@ public class MulticlassClassificationEvaluator extends Evaluator {
 	 * @return precision of Label l
 	 */
 	public float getPrecisionFor(Label l) {
+		if (!this.computed)
+			compute();
+		
 		if (precisions.containsKey(l))
 			return precisions.get(l);
 		return -1.0f;
@@ -162,6 +174,9 @@ public class MulticlassClassificationEvaluator extends Evaluator {
 	 * @return recall of Label l
 	 */
 	public float getRecallFor(Label l) {
+		if (!this.computed)
+			compute();
+		
 		if (recalls.containsKey(l))
 			return recalls.get(l);
 		return -1.0f;
@@ -173,6 +188,9 @@ public class MulticlassClassificationEvaluator extends Evaluator {
 	 * @return f1 of Label l
 	 */
 	public float getF1For(Label l) {
+		if (!this.computed)
+			compute();
+		
 		if (f1s.containsKey(l))
 			return f1s.get(l);
 		return -1.0f;
@@ -184,6 +202,9 @@ public class MulticlassClassificationEvaluator extends Evaluator {
 	 * @return accuracy
 	 */
 	public float getAccuracy() {
+		if (!this.computed)
+			compute();
+		
 		return accuracy;
 	}
 
@@ -193,6 +214,9 @@ public class MulticlassClassificationEvaluator extends Evaluator {
 	 * @return precision
 	 */
 	public float getOverallPrecision() {
+		if (!this.computed)
+			compute();
+		
 		return overallPrecision;
 	}
 
@@ -202,6 +226,9 @@ public class MulticlassClassificationEvaluator extends Evaluator {
 	 * @return recall
 	 */
 	public float getOverallRecall() {
+		if (!this.computed)
+			compute();
+		
 		return overallRecall;
 	}
 
@@ -211,6 +238,9 @@ public class MulticlassClassificationEvaluator extends Evaluator {
 	 * @return f1
 	 */
 	public float getOverallF1() {
+		if (!this.computed)
+			compute();
+		
 		return overallF1;
 	}
 
@@ -220,6 +250,9 @@ public class MulticlassClassificationEvaluator extends Evaluator {
 	 * @return mean F1 of all Label{s}
 	 */
 	public float getMeanF1() {
+		if (!this.computed)
+			compute();
+		
 		return getMeanF1For((ArrayList<Label>) labels);
 	}
 
@@ -229,6 +262,9 @@ public class MulticlassClassificationEvaluator extends Evaluator {
 	 * @return mean F1 of specified Label{s} ls
 	 */
 	public float getMeanF1For(ArrayList<Label> ls) {
+		if (!this.computed)
+			compute();
+		
 		float sum = 0.0f;
 		for (Label l : ls) {
 			sum += f1s.get(l);
@@ -249,6 +285,7 @@ public class MulticlassClassificationEvaluator extends Evaluator {
 		recalls.clear();
 		f1s.clear();
 		accuracy = 0.0f;
+		this.computed=false;
 	}
 
 	/**
@@ -282,5 +319,10 @@ public class MulticlassClassificationEvaluator extends Evaluator {
 					+ "\t" + f1s.get(l) + "\n");
 		}
 		return b.toString().trim();
+	}
+
+	@Override
+	public MulticlassClassificationEvaluator duplicate() {
+		return new MulticlassClassificationEvaluator(labels);
 	}
 }

@@ -20,7 +20,7 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * It is a Vectorial representation
+ * It is a Vectorial representation whose dimensions are identified by Objects
  * 
  * @author Simone Filice
  *
@@ -95,6 +95,31 @@ public interface Vector extends Normalizable {
 	 * @return the non zero features
 	 */
 	@JsonIgnore
-	public Map<String, Number> getActiveFeatures();
+	public Map<Object, Number> getActiveFeatures();
+	
+	/**
+	 * Assigns <code>value</value> to the feature identified by <code>featureIdentifier</code> 
+	 * 
+	 * <p>
+	 * NOTE: this method could be not the most efficient to set a feature value. Actual implementations
+	 * of the Vector class may provide faster methods using their specific type to identify features (instead of
+	 * a generic Object) 
+	 * 
+	 * 
+	 * @param featureIdentifier the identifier of the feature
+	 * @param value the value of the feature
+	 */
+	public void setFeatureValue(Object featureIdentifier, float value);
+	
+	/**
+	 * Returns the value of the feature identified with <code>featureIdentifier</code>
+	 * <p>
+	 * NOTE: this method could be not the most efficient to get a feature value. Actual implementations
+	 * of the Vector class may provide faster methods using their specific type to identify features (instead of
+	 * a generic Object) 
+	 * 
+	 * @return the value of the feature
+	 */
+	public float getFeatureValue(Object featureIdentifier);
 
 }

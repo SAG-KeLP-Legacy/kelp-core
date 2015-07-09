@@ -19,6 +19,7 @@ import it.uniroma2.sag.kelp.data.example.Example;
 import it.uniroma2.sag.kelp.data.representation.Representation;
 import it.uniroma2.sag.kelp.data.representation.Vector;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
@@ -96,6 +97,7 @@ public class BinaryLinearModel extends BinaryModel{
 		return vector.getSquaredNorm();
 	}
 	
+	@JsonIgnore
 	@Override
 	public float getSquaredNorm(){
 		return this.hyperplane.getSquaredNorm();

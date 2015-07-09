@@ -19,7 +19,6 @@ import it.uniroma2.sag.kelp.data.label.Label;
 import it.uniroma2.sag.kelp.data.label.NumericLabel;
 import it.uniroma2.sag.kelp.data.manipulator.Manipulator;
 import it.uniroma2.sag.kelp.data.representation.Representation;
-import it.uniroma2.sag.kelp.data.representation.Vector;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -307,7 +306,7 @@ public abstract class Example implements Serializable {
 	 */
 	public abstract Representation getRepresentation(String representationName);
 	
-	public abstract Vector getZeroVector(String representationIdentifier);
+	//public abstract Vector getZeroVector(String representationIdentifier);
 	
 	/**
 	 * Manipulate this example accordingly to the provided <code>manipulator</code>

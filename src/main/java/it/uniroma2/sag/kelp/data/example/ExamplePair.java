@@ -15,14 +15,12 @@
 
 package it.uniroma2.sag.kelp.data.example;
 
+import it.uniroma2.sag.kelp.data.manipulator.Manipulator;
+import it.uniroma2.sag.kelp.data.representation.Representation;
+
 import java.util.Map.Entry;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-
-import it.uniroma2.sag.kelp.data.example.Example;
-import it.uniroma2.sag.kelp.data.manipulator.Manipulator;
-import it.uniroma2.sag.kelp.data.representation.Representation;
-import it.uniroma2.sag.kelp.data.representation.Vector;
 
 
 /**
@@ -42,7 +40,12 @@ public class ExamplePair extends SimpleExample{
 	private Example rightExample;
 	
 	
+	public ExamplePair(){
+		super();
+	}
+	
 	public ExamplePair(Example left, Example right){
+		this();
 		this.leftExample = left;
 		this.rightExample = right;
 	}
@@ -65,10 +68,10 @@ public class ExamplePair extends SimpleExample{
 		return this.rightExample;
 	}
 
-	@Override
-	public Vector getZeroVector(String representationIdentifier) {
-		return this.leftExample.getZeroVector(representationIdentifier);
-	}
+//	@Override
+//	public Vector getZeroVector(String representationIdentifier) {
+//		return this.leftExample.getZeroVector(representationIdentifier);
+//	}
 	
 	@Override
 	public String toString(){
@@ -86,8 +89,8 @@ public class ExamplePair extends SimpleExample{
 	}
 	
 	/**
-	 * Manipulate this example accordingly to the provided <code>manipulator</code>. The manipulation strategy is applied
-	 * both to the representations stored directly in this ExamplePair than to the ones stored in the left and right
+	 * Manipulates this example according to the provided <code>manipulator</code>. The manipulation strategy is applied
+	 * both to the representations stored directly in this ExamplePair and the ones stored in the left and right
 	 * examples
 	 * 
 	 * @param manipulator the manipulator

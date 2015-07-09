@@ -27,11 +27,10 @@ import it.uniroma2.sag.kelp.predictionfunction.Prediction;
  */
 public class BinaryClassificationEvaluator extends Evaluator {
 	private Label positiveLabel;
-	
-	private int total, correct, truePositivePredicted, predictedPositive,
-			realPositive;
+
+	private int total, correct, truePositivePredicted, predictedPositive, realPositive;
 	private float accuracy, precision, recall, f1;
-	
+
 	public BinaryClassificationEvaluator(Label positiveClass) {
 		this.positiveLabel = positiveClass;
 		initializeCounters();
@@ -41,36 +40,36 @@ public class BinaryClassificationEvaluator extends Evaluator {
 		total = 0;
 		correct = 0;
 		accuracy = 0.0f;
-		realPositive=0;
-		truePositivePredicted=0;
-		predictedPositive=0;
-		precision=0.0f;
-		recall=0.0f;
-		f1=0.0f;
+		realPositive = 0;
+		truePositivePredicted = 0;
+		predictedPositive = 0;
+		precision = 0.0f;
+		recall = 0.0f;
+		f1 = 0.0f;
+		this.computed=false;
 	}
 
 	public void addCount(Example test, Prediction prediction) {
 		total++;
-		if(test.isExampleOf(positiveLabel))
+		if (test.isExampleOf(positiveLabel))
 			realPositive++;
 		if (prediction.getScore(positiveLabel) >= 0)
 			predictedPositive++;
-		if (prediction.getScore(positiveLabel) >= 0
-				&& test.isExampleOf(positiveLabel)) {
+		if (prediction.getScore(positiveLabel) >= 0 && test.isExampleOf(positiveLabel)) {
 			correct++;
 			truePositivePredicted++;
-		} else if (prediction.getScore(positiveLabel) < 0
-				&& !test.isExampleOf(positiveLabel))
+		} else if (prediction.getScore(positiveLabel) < 0 && !test.isExampleOf(positiveLabel))
 			correct++;
+		this.computed = false;
 	}
 
-	public void compute() {		
+	protected void compute() {
 		precision = (float) truePositivePredicted / (float) predictedPositive;
 		recall = (float) truePositivePredicted / (float) realPositive;
-		f1 = 2 * precision * recall
-				/ (precision + recall);
+		f1 = (2 * precision * recall) / (precision + recall);
 
 		accuracy = (float) correct / (float) total;
+		this.computed=true;
 	}
 
 	/**
@@ -79,6 +78,8 @@ public class BinaryClassificationEvaluator extends Evaluator {
 	 * @return accuracy
 	 */
 	public float getAccuracy() {
+		if (!this.computed)
+			compute();
 		return accuracy;
 	}
 
@@ -88,6 +89,8 @@ public class BinaryClassificationEvaluator extends Evaluator {
 	 * @return precision
 	 */
 	public float getPrecision() {
+		if (!this.computed)
+			compute();
 		return precision;
 	}
 
@@ -97,6 +100,8 @@ public class BinaryClassificationEvaluator extends Evaluator {
 	 * @return recall
 	 */
 	public float getRecall() {
+		if (!this.computed)
+			compute();
 		return recall;
 	}
 
@@ -106,6 +111,8 @@ public class BinaryClassificationEvaluator extends Evaluator {
 	 * @return f1
 	 */
 	public float getF1() {
+		if (!this.computed)
+			compute();
 		return f1;
 	}
 
@@ -117,11 +124,12 @@ public class BinaryClassificationEvaluator extends Evaluator {
 		total = 0;
 		correct = 0;
 		accuracy = 0.0f;
-		truePositivePredicted=0;
-		predictedPositive=0;
-		precision=0.0f;
-		recall=0.0f;
-		f1=0.0f;
+		truePositivePredicted = 0;
+		predictedPositive = 0;
+		precision = 0.0f;
+		recall = 0.0f;
+		f1 = 0.0f;
+		this.computed=false;
 	}
 
 	/**
@@ -136,5 +144,10 @@ public class BinaryClassificationEvaluator extends Evaluator {
 		System.out.println("\tCorrect: " + truePositivePredicted);
 		System.out.println("\tPredicted: " + predictedPositive);
 		System.out.println("\tToBePredicted: " + total);
+	}
+
+	@Override
+	public BinaryClassificationEvaluator duplicate() {
+		return new BinaryClassificationEvaluator(positiveLabel);
 	}
 }

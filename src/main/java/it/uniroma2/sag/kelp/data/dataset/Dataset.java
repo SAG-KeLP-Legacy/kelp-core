@@ -108,10 +108,13 @@ public interface Dataset {
 	public List<Example> getExamples();
 	
 	/**
-	 * Returns a zero vector compliant with the representation identifier by <code>representationIdentifier</code> containings all zero
+	 * Returns a zero vector compliant with the representation identifier by <code>representationIdentifier</code> containing all zeros
+	 * <p>NOTE: it assumes that there is at least an example in the dataset and that the representation is directly available on the example
+	 * using the getRepresentation method (i.e., the example is not an ExamplePair storing the representation in its left or right element)
+	 * 
 	 * 
 	 * @param representationIdentifier the identifier of the representation
-	 * @return a zero vector compliant with the representation identifier by <code>representationIdentifier</code> containings all zero
+	 * @return a zero vector compliant with the representation identifier by <code>representationIdentifier</code> containing all zeros
 	 */
 	public Vector getZeroVector(String representationIdentifier);
 	

@@ -23,24 +23,40 @@ import java.io.PrintStream;
 import java.util.zip.GZIPOutputStream;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
 /**
- * It is a serializer, i.e. an object that is able to convert objects into a String representation, preserving all their
- * properties. It embeds the Jackson Serializer.
+ * It is a serializer, i.e. an object that is able to convert objects into a
+ * String representation, preserving all their properties. It embeds the Jackson
+ * Serializer.
  * 
  * @author Simone Filice, Danilo Croce
  *
  */
 public class JacksonSerializerWrapper implements ObjectSerializer {
+	private static ObjectMapper mapper;
 	private static final ObjectWriter ow;
 	static {
-		ObjectMapper mapper = new ObjectMapper();
+		mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(Include.NON_NULL);
 		mapper.setSerializationInclusion(Include.NON_EMPTY);
 		ow = mapper.writer().withDefaultPrettyPrinter();
+	}
+
+	@Override
+	public <T> T readValue(String content, Class<T> valueType)
+			throws IOException, JsonParseException, JsonMappingException {
+		return mapper.readValue(content, valueType);
+	}
+	
+	@Override
+	public <T> T readValue(File file, Class<T> valueType) throws IOException,
+			JsonParseException, JsonMappingException {
+		return mapper.readValue(file, valueType);
 	}
 
 	@Override
@@ -58,14 +74,14 @@ public class JacksonSerializerWrapper implements ObjectSerializer {
 		ps.flush();
 		ps.close();
 	}
-	
+
 	@Override
 	public void writeValueOnGzipFile(Object object, String filePath)
-			throws IOException {		
+			throws IOException {
 		FileOutputStream out = new FileOutputStream(new File(filePath));
 		GZIPOutputStream gzip = new GZIPOutputStream(out);
 		OutputStreamWriter writer = new OutputStreamWriter(gzip);
-//		writer.write(toWrite.toCharArray());
+		// writer.write(toWrite.toCharArray());
 		ow.writeValue(gzip, object);
 		writer.flush();
 		gzip.finish();
@@ -74,4 +90,5 @@ public class JacksonSerializerWrapper implements ObjectSerializer {
 		out.close();
 
 	}
+
 }
