@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package it.uniroma2.sag.kelp.kernel.overPairs;
+package it.uniroma2.sag.kelp.kernel.onPairs;
 
 import it.uniroma2.sag.kelp.data.example.Example;
 import it.uniroma2.sag.kelp.data.example.ExamplePair;
@@ -24,7 +24,7 @@ import it.uniroma2.sag.kelp.kernel.KernelComposition;
  * 
  * @author Simone Filice
  */
-public abstract class KernelOverPairs extends KernelComposition{
+public abstract class KernelOnPairs extends KernelComposition{
 	
 	@Override
 	protected float kernelComputation(Example exA, Example exB) {
