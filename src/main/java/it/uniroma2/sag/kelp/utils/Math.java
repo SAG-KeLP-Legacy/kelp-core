@@ -23,6 +23,8 @@ package it.uniroma2.sag.kelp.utils;
  */
 public class Math {
 	
+	private static final int SOFTMAX_FACTOR = 100;
+	
 	/**
 	 * It evaluates the power of a number 
 	 * 
@@ -105,5 +107,26 @@ public class Math {
 	 */
 	public static double getStandardDeviation(float [] values){
 		return java.lang.Math.sqrt(getVariance(values));
+	}
+	
+	
+	/**
+	 * Approximates the max of two values with the following formula:
+	 * 	\(softmax(a,b) = \frac{log(e^{Fa} + e^{Fb})}{F}\) 
+	 * <p>
+	 * where F=100
+	 * <p>
+	 * This approximation is necessary when the max function is needed in a kernel
+	 * to preserve its semi-positiveness (because the max does break this property)
+	 * 
+	 * 
+	 * @param a the first value
+	 * @param b the second value
+	 * @return the approximation of <code>max(a,b)</code>
+	 */
+	public static float softmax(float a, float b){
+		double expA = java.lang.Math.exp(SOFTMAX_FACTOR*a);
+		double expB =  java.lang.Math.exp(SOFTMAX_FACTOR*b);
+		return (float)(java.lang.Math.log(expA + expB)/SOFTMAX_FACTOR);
 	}
 }
