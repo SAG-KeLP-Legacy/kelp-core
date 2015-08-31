@@ -34,6 +34,14 @@ public interface Vector extends Normalizable {
 	 * @return the dot product
 	 */
 	public float innerProduct(Vector vector);
+	
+	/**
+	 * Returns the euclidean distance between this vector and <code>vector</code>
+	 * 
+	 * @param vector
+	 * @return the euclidead distance
+	 */
+	public float euclideanDistance(Vector vector);
 
 	/**
 	 * Compute the point-wise product of this vector with the one in
