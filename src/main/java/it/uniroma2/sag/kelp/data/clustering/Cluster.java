@@ -19,7 +19,9 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.Vector;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 
 /**
  * It is the instance of a Cluster, intended as a set of objects, instantiated
@@ -28,6 +30,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * @author Danilo Croce
  */
 @JsonTypeName("cluster")
+@JsonTypeInfo(use = JsonTypeInfo.Id.CUSTOM, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonTypeIdResolver(ClusterTypeResolver.class)
 public class Cluster implements Serializable {
 
 	private static final long serialVersionUID = 5118220715068288983L;
