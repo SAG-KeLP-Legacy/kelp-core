@@ -17,6 +17,7 @@ package it.uniroma2.sag.kelp.learningalgorithm.clustering;
 
 import it.uniroma2.sag.kelp.data.clustering.Cluster;
 import it.uniroma2.sag.kelp.data.dataset.Dataset;
+import it.uniroma2.sag.kelp.data.dataset.example_selection.ExampleSelector;
 
 import java.util.List;
 
@@ -37,5 +38,16 @@ public interface ClusteringAlgorithm {
 	 * @return the data instances grouped in clusters
 	 */
 	public List<Cluster> cluster(Dataset dataset);
+
+	/**
+	 * It starts the clustering process exploiting the provided
+	 * <code>dataset</code>
+	 * 
+	 * @param dataset
+	 * @param seedSelector
+	 *            the seed selector
+	 * @return the data instances grouped in clusters
+	 */
+	public List<Cluster> cluster(Dataset dataset, ExampleSelector seedSelector);
 
 }
