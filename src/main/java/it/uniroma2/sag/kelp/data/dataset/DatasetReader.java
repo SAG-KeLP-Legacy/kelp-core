@@ -16,6 +16,7 @@ package it.uniroma2.sag.kelp.data.dataset;
 
 import it.uniroma2.sag.kelp.data.example.Example;
 import it.uniroma2.sag.kelp.data.example.ExampleFactory;
+import it.uniroma2.sag.kelp.data.example.ParsingExampleException;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -93,12 +94,17 @@ public class DatasetReader {
 	 * @throws IOException
 	 * @throws InstantiationException
 	 */
-	public Example readNextExample() throws IOException, InstantiationException {
+	public Example readNextExample() throws IOException, InstantiationException, ParsingExampleException {
 		if (!this.hasNextRow) {
 			throw new IOException(
 					"DatasetIO Exception: There is no example to read!");
 		}
-		Example example = ExampleFactory.parseExample(nextRow);
+		Example example;
+		try {
+			example = ExampleFactory.parseExample(nextRow);
+		} catch (ParsingExampleException e) {
+			throw new ParsingExampleException(e, nextRow);
+		}
 		this.nextRow = this.inputBuffer.readLine();
 		this.checkRowValidity();
 		return example;

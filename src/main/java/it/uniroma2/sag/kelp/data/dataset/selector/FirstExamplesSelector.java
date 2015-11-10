@@ -17,6 +17,7 @@ import it.uniroma2.sag.kelp.data.dataset.Dataset;
 import it.uniroma2.sag.kelp.data.dataset.DatasetReader;
 import it.uniroma2.sag.kelp.data.dataset.SimpleDataset;
 import it.uniroma2.sag.kelp.data.example.Example;
+import it.uniroma2.sag.kelp.data.example.ParsingExampleException;
 
 import java.io.IOException;
 import java.util.List;
@@ -62,9 +63,10 @@ public class FirstExamplesSelector implements ExampleSelector {
 	 *            A <code>DatasetReader</code> to select <code>Example</code>s
 	 *            from.
 	 * @return A list of <code>Example</code>s.
+	 * @throws ParsingExampleException 
 	 */
 	public List<Example> select(DatasetReader datasetReader)
-			throws IOException, InstantiationException {
+			throws IOException, InstantiationException, ParsingExampleException {
 
 		int counter = 1;
 		SimpleDataset dataset = new SimpleDataset();
