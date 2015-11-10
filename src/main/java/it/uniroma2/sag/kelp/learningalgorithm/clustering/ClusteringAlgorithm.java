@@ -17,7 +17,7 @@ package it.uniroma2.sag.kelp.learningalgorithm.clustering;
 
 import it.uniroma2.sag.kelp.data.clustering.Cluster;
 import it.uniroma2.sag.kelp.data.dataset.Dataset;
-import it.uniroma2.sag.kelp.data.dataset.example_selection.ExampleSelector;
+import it.uniroma2.sag.kelp.data.dataset.selector.ExampleSelector;
 
 import java.util.List;
 
