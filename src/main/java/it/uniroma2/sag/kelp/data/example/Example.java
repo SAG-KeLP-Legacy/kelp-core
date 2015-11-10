@@ -37,37 +37,37 @@ import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 /**
  * It is the instance of an example in the Machine Learning context. An Example
  * consists of one or more representation of the same object and zero
- * (unsupervised learning) or more classificationLabels (supervised learning. Single or
- * multitask learning)
+ * (unsupervised learning) or more classificationLabels (supervised learning.
+ * Single or multitask learning)
  * 
  * @author Simone Filice
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.CUSTOM, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonTypeIdResolver(ExampleTypeResolver.class)
-@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="ID")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "ID")
 public abstract class Example implements Serializable {
 	private static final long serialVersionUID = 755613612497626480L;
 	private static long created = 0;
 
-	
 	private HashSet<Label> classificationLabels;
 	private ArrayList<NumericLabel> regressionValues;
-	
+
 	@JsonIgnore
 	private HashMap<Label, Integer> propertyToIndexMapping;
 	private long exampleId;
-	
-	//private HashMap<Integer, Integer> cacheIndex;
+
+	// private HashMap<Integer, Integer> cacheIndex;
 
 	/**
-	 * Initializes an empty example (0 classificationLabels and 0 regression values)
+	 * Initializes an empty example (0 classificationLabels and 0 regression
+	 * values)
 	 */
 	public Example() {
-		this.classificationLabels = new HashSet<Label>();		
+		this.classificationLabels = new HashSet<Label>();
 		this.exampleId = this.generateUniqueIdentifier();
 		this.regressionValues = new ArrayList<NumericLabel>();
 		this.propertyToIndexMapping = new HashMap<Label, Integer>();
-		//this.cacheIndex = new HashMap<Integer, Integer>();
+		// this.cacheIndex = new HashMap<Integer, Integer>();
 	}
 
 	/**
@@ -75,7 +75,7 @@ public abstract class Example implements Serializable {
 	 * 
 	 * @return the ID
 	 */
-	private synchronized long generateUniqueIdentifier(){
+	private synchronized long generateUniqueIdentifier() {
 		long id = created;
 		created++;
 		return id;
@@ -95,12 +95,12 @@ public abstract class Example implements Serializable {
 	public long getId() {
 		return this.exampleId;
 	}
-	
 
 	/**
 	 * Sets the example classificationLabels
 	 * 
-	 * @param classificationLabels of which this instance is a positive example
+	 * @param classificationLabels
+	 *            of which this instance is a positive example
 	 */
 	@JsonIgnore
 	public void setLabels(Label[] labels) {
@@ -119,9 +119,10 @@ public abstract class Example implements Serializable {
 	 */
 	@JsonIgnore
 	public Label[] getLabels() {
-		return classificationLabels.toArray(new Label[classificationLabels.size()]);
+		return classificationLabels.toArray(new Label[classificationLabels
+				.size()]);
 	}
-	
+
 	/**
 	 * Returns the classificationLabels of this example
 	 * 
@@ -129,7 +130,8 @@ public abstract class Example implements Serializable {
 	 */
 	@JsonIgnore
 	public NumericLabel[] getRegressionLabels() {
-		return regressionValues.toArray(new NumericLabel[regressionValues.size()]);
+		return regressionValues.toArray(new NumericLabel[regressionValues
+				.size()]);
 	}
 
 	/**
@@ -139,12 +141,14 @@ public abstract class Example implements Serializable {
 	 */
 	public void addLabel(Label label) {
 		if (label instanceof NumericLabel) {
-			NumericLabel regressionLabel = (NumericLabel)label;
-			Integer index = this.propertyToIndexMapping.get(regressionLabel.getProperty());
+			NumericLabel regressionLabel = (NumericLabel) label;
+			Integer index = this.propertyToIndexMapping.get(regressionLabel
+					.getProperty());
 			if (index == null) {
 				int nextIndex = this.regressionValues.size();
 				this.regressionValues.add(regressionLabel);
-				this.propertyToIndexMapping.put(regressionLabel.getProperty(), nextIndex);
+				this.propertyToIndexMapping.put(regressionLabel.getProperty(),
+						nextIndex);
 			} else {
 				this.regressionValues.set(index, regressionLabel);
 			}
@@ -153,18 +157,18 @@ public abstract class Example implements Serializable {
 		}
 	}
 
-	
-
 	/**
-	 * Returns the number of classification classificationLabels whose this instance is a positive example
+	 * Returns the number of classification classificationLabels whose this
+	 * instance is a positive example
 	 * 
-	 * @return the number of classificationLabels whose this instance is a positive example
+	 * @return the number of classificationLabels whose this instance is a
+	 *         positive example
 	 */
 	@JsonIgnore
 	public int getNumberOfClassificationLabels() {
 		return classificationLabels.size();
 	}
-	
+
 	/**
 	 * Returns the number of regression classificationLabels
 	 * 
@@ -183,26 +187,27 @@ public abstract class Example implements Serializable {
 	 *         <code>label</code>, false otherwise
 	 */
 	public boolean isExampleOf(Label label) {
-		return classificationLabels.contains(label);	
+		return classificationLabels.contains(label);
 	}
-	
+
 	/**
 	 * Returns the numeric value associated to a label
 	 * 
-	 * @param propertyName the regression label identifier
-	 * @return the numeric value associated to the label identified by <code>propertyName</code>
-	 * or null if that label is not a NumericLabel or this example does not contain
-	 * that label
+	 * @param propertyName
+	 *            the regression label identifier
+	 * @return the numeric value associated to the label identified by
+	 *         <code>propertyName</code> or null if that label is not a
+	 *         NumericLabel or this example does not contain that label
 	 */
 	@JsonIgnore
 	public Float getRegressionValue(Label property) {
 		Integer index = this.propertyToIndexMapping.get(property);
-		if(index != null){
+		if (index != null) {
 			return this.regressionValues.get(index).getValue();
 		}
-		return null;		
+		return null;
 	}
-	
+
 	/**
 	 * @return the classificationLabels
 	 */
@@ -211,7 +216,8 @@ public abstract class Example implements Serializable {
 	}
 
 	/**
-	 * @param classificationLabels the classificationLabels to set
+	 * @param classificationLabels
+	 *            the classificationLabels to set
 	 */
 	public void setClassificationLabels(HashSet<Label> labels) {
 		this.classificationLabels = labels;
@@ -225,13 +231,15 @@ public abstract class Example implements Serializable {
 	}
 
 	/**
-	 * @param regressionValues the regressionValues to set
+	 * @param regressionValues
+	 *            the regressionValues to set
 	 */
 	public void setRegressionValues(ArrayList<NumericLabel> regressionValues) {
 		this.regressionValues = regressionValues;
 		this.propertyToIndexMapping.clear();
-		for(int i=0; i<regressionValues.size(); i++){
-			this.propertyToIndexMapping.put(regressionValues.get(i).getProperty(), i);
+		for (int i = 0; i < regressionValues.size(); i++) {
+			this.propertyToIndexMapping.put(regressionValues.get(i)
+					.getProperty(), i);
 		}
 	}
 
@@ -245,51 +253,61 @@ public abstract class Example implements Serializable {
 		}
 		if (example instanceof Example) {
 			Example that = (Example) example;
-			return (this.getLabels().equals(that.getLabels()) ) 
-					&& (this.getRegressionLabels().equals(that.getRegressionLabels()) );
+			return (this.getLabels().equals(that.getLabels()))
+					&& (this.getRegressionLabels().equals(that
+							.getRegressionLabels()));
 		}
 		return true;
 	}
 
-	@Override
-	public Example clone() {
-		return SerializationUtils.clone(this);
+	/**
+	 * @return A copu of the current object with a different identifier, i.e.
+	 *         the <code>exampleId</code>
+	 */
+	public Example duplicate() {
+		Example res = SerializationUtils.clone(this);
+		res.exampleId = this.generateUniqueIdentifier();
+		return res;
 	}
-	
-	protected String getTextualLabelPart(){
+
+	protected String getTextualLabelPart() {
 		String ret = "";
-		for(Label label : this.getLabels()){
-			ret +=label.toString() + ExampleFactory.LABEL_SEPARATOR;
+		for (Label label : this.getLabels()) {
+			ret += label.toString() + ExampleFactory.LABEL_SEPARATOR;
 		}
-		for(NumericLabel label : this.getRegressionLabels()){
-			ret +=label.toString() + ExampleFactory.LABEL_SEPARATOR;
+		for (NumericLabel label : this.getRegressionLabels()) {
+			ret += label.toString() + ExampleFactory.LABEL_SEPARATOR;
 		}
 		return ret;
 	}
-	
+
 	/**
 	 * Sets the example representations
 	 * 
 	 * @param representations
 	 *            to associate to this example
 	 */
-	public abstract void setRepresentations(HashMap<String, Representation> representations);
-	
+	public abstract void setRepresentations(
+			HashMap<String, Representation> representations);
+
 	/**
 	 * Returns the example representations
 	 * 
 	 * @return the representations of this example
 	 */
 	public abstract Map<String, Representation> getRepresentations();
-	
+
 	/**
 	 * Adds a representation to this example
 	 * 
-	 * @param representationName the identifier of the representation to be added
-	 * @param representation the representation to be added
+	 * @param representationName
+	 *            the identifier of the representation to be added
+	 * @param representation
+	 *            the representation to be added
 	 */
-	public abstract void addRepresentation(String representationName, Representation representation);
-	
+	public abstract void addRepresentation(String representationName,
+			Representation representation);
+
 	/**
 	 * Returns the number of representations in which this example is modeled
 	 * 
@@ -297,21 +315,26 @@ public abstract class Example implements Serializable {
 	 */
 	@JsonIgnore
 	public abstract int getNumberOfRepresentations();
-	
+
 	/**
-	 * Returns the representation corresponding to <code>representationName</code>
+	 * Returns the representation corresponding to
+	 * <code>representationName</code>
 	 * 
-	 * @param representationName it is a representation identifier
-	 * @return the representation corresponding to <code>representationName</code>
+	 * @param representationName
+	 *            it is a representation identifier
+	 * @return the representation corresponding to
+	 *         <code>representationName</code>
 	 */
 	public abstract Representation getRepresentation(String representationName);
-	
-	//public abstract Vector getZeroVector(String representationIdentifier);
-	
+
+	// public abstract Vector getZeroVector(String representationIdentifier);
+
 	/**
-	 * Manipulate this example accordingly to the provided <code>manipulator</code>
+	 * Manipulate this example accordingly to the provided
+	 * <code>manipulator</code>
 	 * 
-	 * @param manipulator the manipulator
+	 * @param manipulator
+	 *            the manipulator
 	 */
 	public abstract void manipulate(Manipulator manipulator);
 
