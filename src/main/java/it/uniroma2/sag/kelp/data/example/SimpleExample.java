@@ -23,6 +23,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
@@ -32,6 +35,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("simple")
 public class SimpleExample extends Example {
 
+	protected Logger logger = LoggerFactory.getLogger(Example.class);
 	/**
 	 * 
 	 */
@@ -166,5 +170,27 @@ public class SimpleExample extends Example {
 	@Override
 	public void manipulate(Manipulator manipulator){
 		manipulator.manipulate(this);
+	}
+
+	@Override
+	public boolean isCompatible(Example example) {
+		
+		if(example.getNumberOfRepresentations()!=this.getNumberOfRepresentations()){
+			logger.error("examples are incompatible because they have a different number of representations: " + this.getNumberOfRepresentations() + " vs " + example.getNumberOfRepresentations());
+			return false;
+		}
+		for(Entry<String, Representation> entry : this.representations.entrySet()){
+			Representation repThat = example.getRepresentation(entry.getKey());
+			if(repThat==null){
+				logger.error("examples are incompatible because the representation \"" + entry.getKey() + "\" is only in one of them");
+				return false;
+			}
+			if(!entry.getValue().isCompatible(repThat)){
+				return false;
+			}
+		}
+
+		
+		return true;
 	}
 }

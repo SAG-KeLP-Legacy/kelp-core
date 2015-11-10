@@ -314,5 +314,14 @@ public abstract class Example implements Serializable {
 	 * @param manipulator the manipulator
 	 */
 	public abstract void manipulate(Manipulator manipulator);
+	
+	/**
+	 * Evaluates whether an example is compatible with this one, i.e., they have the
+	 * same structure in terms of Example type and representations 
+	 * 
+	 * @param example the example to be compared with this one
+	 * @return whether this example is compatible with the input one
+	 */
+	public abstract boolean isCompatible(Example example);
 
 }

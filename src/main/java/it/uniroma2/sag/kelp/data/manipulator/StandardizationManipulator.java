@@ -47,9 +47,11 @@ public class StandardizationManipulator implements Manipulator{
 	public StandardizationManipulator(String representation, List<Example> examples){
 		this.representation = representation;
 		means = ((Vector)examples.get(0).getRepresentation(representation)).getZeroVector();
+
 		for(Example example: examples){
 			Vector vector = (Vector) example.getRepresentation(representation);
 			means.add(vector);
+
 		}
 		means.scale(1f/examples.size());
 		stdDevs = means.getZeroVector();

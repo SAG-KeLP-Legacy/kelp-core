@@ -54,5 +54,14 @@ public interface Representation extends Serializable {
 	 */
 	@JsonProperty("content")
 	public String getTextFromData();
+	
+	/**
+	 * Evaluates whether a representation is compatible with this one, e.g.., they have 
+	 * same type and pass additional checks that are type-dependent
+	 * 
+	 * @param rep the representation to be compared with this one
+	 * @return whether this representation is compatible with the input one
+	 */
+	public boolean isCompatible(Representation rep);
 
 }

@@ -30,6 +30,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * A SimpleDataset that represent a whole dataset in memory.
  * 
@@ -37,6 +40,7 @@ import java.util.Random;
  */
 public class SimpleDataset implements Dataset {
 
+	private Logger logger = LoggerFactory.getLogger(SimpleDataset.class);
 	private static final long DEFAULT_SEED=1;
 	
 	private ArrayList<Example> examples;
@@ -375,6 +379,9 @@ public class SimpleDataset implements Dataset {
 			this.addExample(example);
 		}
 		reader.close();
+		if(!this.isConsistent()){
+			throw new IOException("the dataset contains incompatible examples");
+		}
 	}
 
 	@Override
@@ -451,6 +458,29 @@ public class SimpleDataset implements Dataset {
 			datasetWriter.writeNextExample(e);
 		}
 		datasetWriter.close();
+	}
+	
+	/**
+	 * Evaluates whether the examples included in this dataset are compatible 
+	 * with each other. In particular it compares the first example with all the
+	 * others 
+	 *
+	 * @return whether this dataset is consistent, i.e., its examples are 
+	 * compatible with each others 
+	 */
+	public boolean isConsistent(){
+		if(this.getNumberOfExamples()==0){
+			return true;
+		}
+		Example ex1 = this.getExample(0);
+		for(int i=1; i< this.getNumberOfExamples(); i++){
+			Example ex = this.getExample(i);
+			if(!ex1.isCompatible(ex)){
+				logger.error("example " + i + " is incompatible with example 0");
+				return false;
+			}
+		}
+		return true;
 	}
 
 }

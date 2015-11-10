@@ -38,18 +38,18 @@ public class ExamplePair extends SimpleExample{
 	private static final long serialVersionUID = 8709822366703676966L;
 	private Example leftExample;
 	private Example rightExample;
-	
-	
+
+
 	public ExamplePair(){
 		super();
 	}
-	
+
 	public ExamplePair(Example left, Example right){
 		this();
 		this.leftExample = left;
 		this.rightExample = right;
 	}
-	
+
 	/**
 	 * Returns the left example in the pair
 	 * 
@@ -58,7 +58,7 @@ public class ExamplePair extends SimpleExample{
 	public Example getLeftExample() {
 		return this.leftExample;
 	}
-	
+
 	/**
 	 * Returns the right example in the pair
 	 * 
@@ -68,11 +68,11 @@ public class ExamplePair extends SimpleExample{
 		return this.rightExample;
 	}
 
-//	@Override
-//	public Vector getZeroVector(String representationIdentifier) {
-//		return this.leftExample.getZeroVector(representationIdentifier);
-//	}
-	
+	//	@Override
+	//	public Vector getZeroVector(String representationIdentifier) {
+	//		return this.leftExample.getZeroVector(representationIdentifier);
+	//	}
+
 	@Override
 	public String toString(){
 		String ret = this.getTextualLabelPart();
@@ -80,14 +80,14 @@ public class ExamplePair extends SimpleExample{
 		for(Entry<String, Representation> entry: this.getRepresentations().entrySet()){
 			Representation representation = entry.getValue();
 			String identifier = entry.getKey();
-			
+
 			ret += ExampleFactory.getTextualRepresentation(representation, identifier)					
 					+ ExampleFactory.REPRESENTATION_SEPARATOR;
-			
+
 		}
 		return ret;
 	}
-	
+
 	/**
 	 * Manipulates this example according to the provided <code>manipulator</code>. The manipulation strategy is applied
 	 * both to the representations stored directly in this ExamplePair and the ones stored in the left and right
@@ -100,5 +100,28 @@ public class ExamplePair extends SimpleExample{
 		super.manipulate(manipulator);
 		this.leftExample.manipulate(manipulator);
 		this.rightExample.manipulate(manipulator);
+	}
+
+	@Override
+	public boolean isCompatible(Example example){
+
+		if(example instanceof ExamplePair){
+			ExamplePair that = (ExamplePair)example;
+			if(!super.isCompatible(example)){
+				return false;
+			}
+			if(!this.getLeftExample().isCompatible(that.leftExample)){
+				logger.error("example pairs are incompatible because their left parts are incompatible");
+				return false;
+			}
+			if(!this.getRightExample().isCompatible(that.getRightExample())){
+				logger.error("example pairs are incompatible because their right parts are incompatible");
+				return false;
+			}
+		}else{
+			logger.error("examples are incompatible because they are not both ExamplePairs");
+			return false;
+		}
+		return true;
 	}
 }
